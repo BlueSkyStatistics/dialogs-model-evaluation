@@ -105,7 +105,6 @@ plotPImap({{selected.modelselector1 | safe}}, item.subset = "all", sorted = FALS
                   allow_spaces:true,
                   extraction: "TextAsIs",
                   type: "character",
-                  ml: 4,
                   width:"w-25",
                 })
               },
