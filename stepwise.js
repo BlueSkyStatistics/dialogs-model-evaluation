@@ -13,8 +13,8 @@ var localization = {
         forwardback: "forward/backward",
         backward: "backward",
         forward: "forward",
-        aic: "AIC",
-        bic: "BIC",
+        aic: "AIC (degress of freedom used for penalty k = 2)",
+        bic: "BIC (degrees of freedom used for penalty k = log(no of rows in model matrix)) NOTE: Output displays AIC even even when BIC is selected)",
         label6: "Criterion",
         help: {
             title: "Stepwise",
