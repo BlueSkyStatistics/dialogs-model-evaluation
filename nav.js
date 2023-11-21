@@ -10,7 +10,8 @@ const nav = {
             "children": [
                 "./compareModels",
                 "./compareNModels",
-                "./compareQuantReg"
+                "./compareQuantReg",
+                "./compareNModelsSEM"
             ]
         },
         "./confidenceInterval",
