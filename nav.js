@@ -44,7 +44,8 @@ const nav = {
             "name": "Predict",
             "icon": "icon-y-hat",
             "children": [
-                "./Scoring/Scoring"
+                "./Scoring/Scoring",
+                "./Scoring/scoringSurvivalCL",
             ]
         },
         "./stepwise",
