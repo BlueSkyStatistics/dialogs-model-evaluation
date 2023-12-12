@@ -4,7 +4,7 @@ var localization = {
         title: "Confidence Interval",
         navigation: "Confidence Interval",
         label1: "Select a model of one of the following classes. (R class is listed in parenthesis below)",
-        label2: "Linear model (lm), Generalized linear model (glm), Nonlinear Least Squares (nls), Ordered Logistic/Probit regression (polr), Multinomial Log-Linear Models (multinom)",
+        label2: "Linear model (lm), Generalized linear model (glm), Nonlinear Least Squares (nls), Ordered Logistic/Probit regression (polr), Multinomial Log-Linear models (multinom), Cox regession models (coxph)",
         label3: "Based on",
         modelselector1: "Select a model",
         conlevel: "Confidence interval",
@@ -86,7 +86,7 @@ local(
 if ( "train" %in% class({{selected.modelselector1 | safe}}) )
 {
 tmpbsky <- stats::confint({{selected.modelselector1 | safe}}$finalModel, level={{selected.conlevel | safe}}, type="{{selected.grp1 | safe}}")
-if ("lm" %in% class({{selected.modelselector1 | safe}}$finalModel) || "glm" %in% class({{selected.modelselector1 | safe}}$finalModel)  ||  "polr" %in% class({{selected.modelselector1 | safe}}$finalModel) || "nls" %in% class({{selected.modelselector1 | safe}}$finalModel) ) 
+if ("lm" %in% class({{selected.modelselector1 | safe}}$finalModel) || "glm" %in% class({{selected.modelselector1 | safe}}$finalModel)  ||  "polr" %in% class({{selected.modelselector1 | safe}}$finalModel) || "nls" %in% class({{selected.modelselector1 | safe}}$finalModel) ||"coxph" %in% class({{selected.modelselector1 | safe}}$finalModel) ) 
 {
 BSkyFormat(tmpbsky, singleTableOutputHeader =paste ("Confidence Interval (level = ",{{selected.conlevel | safe}}, ")", sep="", collapse="")  )
 } else
@@ -96,7 +96,7 @@ print(knitr::kable(tmpbsky))
 } else
 {
 tmpbsky <- stats::confint({{selected.modelselector1 | safe}}, level={{selected.conlevel | safe}}, type="{{selected.grp1 | safe}}")
-if ("lm" %in% class({{selected.modelselector1 | safe}}) || "glm" %in% class({{selected.modelselector1 | safe}}) ||  "polr" %in% class({{selected.modelselector1 | safe}})  || "nls" %in% class({{selected.modelselector1 | safe}}) )
+if ("lm" %in% class({{selected.modelselector1 | safe}}) || "glm" %in% class({{selected.modelselector1 | safe}}) ||  "polr" %in% class({{selected.modelselector1 | safe}})  || "nls" %in% class({{selected.modelselector1 | safe}}) ||"coxph" %in% class({{selected.modelselector1 | safe}} ) )
 { 
 BSkyFormat(tmpbsky, singleTableOutputHeader =paste ("Confidence Interval (level = ",{{selected.conlevel | safe}}, ")", sep="", collapse="")  )
 } else
@@ -108,7 +108,7 @@ print(knitr::kable(tmpbsky))
 )
 `,
             pre_start_r: JSON.stringify({
-                modelselector1: "BSkyGetAvailableModels(c(\"lm\", \"glm\", \"multinom\",\"nls\",\"polr\"))",
+                modelselector1: "BSkyGetAvailableModels(c(\"lm\", \"glm\", \"multinom\",\"nls\",\"polr\", \"coxph\" ))",
             })
         }
         var objects = {

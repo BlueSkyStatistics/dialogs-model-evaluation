@@ -139,7 +139,7 @@ cat("\n")
 BSkyFormat(as.data.frame(anovaResults), singleTableOutputHeader = title)
 if ( !("loess" %in% modclass || "gls" %in% modclass) )
 {
-lrtestResults <- lmtest::lrtest({{selected.modelselector1 | safe}}, {{selected.modelselector2 | safe}})
+lrtestResults <- lmtest::lrtest( {{selected.modelselector2 | safe}}, {{selected.modelselector1 | safe}})
 if(reducedmodel != " ")
 {
 cat(attr(lrtestResults,"heading")[2])

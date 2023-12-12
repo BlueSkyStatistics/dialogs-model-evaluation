@@ -6,6 +6,7 @@ var localization = {
         label1: "NOTE: THE ACTIVE DATASET MUST BE THE SAME DATASET USED TO BUILD THE MODEL",
         modelselector1: "Select a generalized linear model (model of class glm):",
         destination: "Target variable:",
+        bins: "Number of bins", 
         help: {
             title: "Hosmer-Lemeshow Test",
             r_help: "help(HLgof.test, package='MKmisc')",
@@ -80,10 +81,10 @@ if ( results$success ==TRUE)
 {
 if ( "train" %in% class({{selected.modelselector1 | safe}}) )
 {
-BSkyFormat(MKmisc::HLgof.test(fit = fitted({{selected.modelselector1 | safe}}$finalModel), obs = {{selected.destination | safe}}))
+BSkyFormat(MKmisc::HLgof.test(fit = fitted({{selected.modelselector1 | safe}}$finalModel), ngr = {{selected.bins | safe}}, obs = {{selected.destination | safe}}))
 } else
 {
-BSkyFormat(MKmisc::HLgof.test(fit = fitted({{selected.modelselector1 | safe}}), obs = {{selected.destination | safe}}))
+BSkyFormat(MKmisc::HLgof.test(fit = fitted({{selected.modelselector1 | safe}}), ngr = {{selected.bins | safe}}, obs = {{selected.destination | safe}}))
 }
 }
 `,
@@ -114,11 +115,22 @@ BSkyFormat(MKmisc::HLgof.test(fit = fitted({{selected.modelselector1 | safe}}), 
                     required: true,
                 }), r: ['{{ var | safe}}']
             },
+            bins: {
+                el: new inputSpinner(config, {
+                  no: 'bins',
+                  label: localization.en.bins,
+                  min: 2,
+                  max: 999999999,
+                  step: 1,
+                  value: 10,
+                  extraction: "NoPrefix|UseComma"
+                })
+              },
         }
         const content = {
             head: [objects.label1.el.content, objects.modelselector1.el.content],
             left: [objects.content_var.el.content],
-            right: [objects.destination.el.content],
+            right: [objects.destination.el.content, objects.bins.el.content],
             nav: {
                 name: localization.en.navigation,
                 icon: "icon-hl",
