@@ -81,10 +81,14 @@ if ( results$success ==TRUE)
 {
 if ( "train" %in% class({{selected.modelselector1 | safe}}) )
 {
-BSkyFormat(MKmisc::HLgof.test(fit = fitted({{selected.modelselector1 | safe}}$finalModel), ngr = {{selected.bins | safe}}, obs = {{selected.destination | safe}}))
+    BSkyHLStatistic <- MKmisc::HLgof.test(fit = fitted({{selected.modelselector1 | safe}}$finalModel), ngr = {{selected.bins | safe}}, obs = {{selected.destination | safe}})
+    BSkyFormat(BSkyHLStatistic$C, outputTableIndex = c(tableone=1))
+    BSkyFormat(BSkyHLStatistic$H, outputTableIndex = c(tableone=1))
 } else
 {
-BSkyFormat(MKmisc::HLgof.test(fit = fitted({{selected.modelselector1 | safe}}), ngr = {{selected.bins | safe}}, obs = {{selected.destination | safe}}))
+    BSkyHLStatistic <- MKmisc::HLgof.test(fit = fitted({{selected.modelselector1 | safe}}), ngr = {{selected.bins | safe}}, obs = {{selected.destination | safe}})
+    BSkyFormat(BSkyHLStatistic$C, outputTableIndex = c(tableone=1))
+    BSkyFormat(BSkyHLStatistic$H, outputTableIndex = c(tableone=1))
 }
 }
 `,
