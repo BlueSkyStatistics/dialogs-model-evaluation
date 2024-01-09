@@ -74,7 +74,7 @@ class pseudoRSquared extends baseModal {
 BSkyFormat(pscl::pR2({{selected.modelselector1 | safe}}), singleTableOutputHeader ="pseudo-R2 measures")           
 `,
             pre_start_r: JSON.stringify({
-                modelselector1: "BSkyGetAvailableModels(c(\"glm\",\"polr\",\"multinom\"))",
+                modelselector1: "BSkyGetAvailableModels(c(\"glm\",\"polr\",\"multinom\"), returnClassTrain = FALSE)",
             })
         }
         var objects = {
