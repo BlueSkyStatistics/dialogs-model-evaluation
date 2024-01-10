@@ -86,7 +86,7 @@ BSkyFormat(result)
 }
 `,
             pre_start_r: JSON.stringify({
-                modelselector1: "BSkyGetAvailableModels(c(\"lm\", \"glm\", \"multinom\",\"nnet\",\"polr\"))",
+                modelselector1: "BSkyGetAvailableModels(c(\"lm\", \"glm\", \"multinom\",\"nnet\",\"polr\"), returnClassTrain = FALSE)",
             })
         }
         var objects = {
