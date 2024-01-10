@@ -120,7 +120,7 @@ BSkyFormat(result)
             },
             label6: { el: new labelVar(config, { label: localization.en.label6, h: 6 }) },
             aic: {
-                el: new radioButton(config, { label: localization.en.aic, no: "rgrp", increment: "aic", value: "AIC", state: "checked    ", extraction: "ValueAsIs" })
+                el: new radioButton(config, { label: localization.en.aic, no: "rgrp", increment: "aic", value: "AIC", state: "checked", extraction: "ValueAsIs" })
             },
             bic: {
                 el: new radioButton(config, { label: localization.en.bic, no: "rgrp", increment: "bic", value: "BIC", state: "", extraction: "ValueAsIs" })

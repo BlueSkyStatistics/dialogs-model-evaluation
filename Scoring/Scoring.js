@@ -171,7 +171,7 @@ if (ROC && {{selected.roctable | safe}})
 BSkyLoadRefresh("{{dataset.name}}")
 `,
             pre_start_r: JSON.stringify({
-                modelSelection: "BSkyGetAvailableModelsCP(objclasslist ='All_Models', suppress = \"coxph\")",
+                modelSelection: "BSkyGetAvailableModels(objclasslist ='All_Models', suppress = \"coxph\")",
             })
         }
         var objects = {

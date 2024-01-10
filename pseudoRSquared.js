@@ -94,7 +94,7 @@ BSkyFormat(pscl::pR2({{selected.modelselector1 | safe}}), singleTableOutputHeade
             },
         }
         const content = {
-            items: [objects.label1.el.content, objects.label2.el.content, objects.modelselector1.el.content],
+            items: [objects.label1.el.content, objects.label2.el.content,objects.label3.el.content, objects.modelselector1.el.content],
             nav: {
                 name: localization.en.navigation,
                 icon: "icon-r_squared",
