@@ -111,7 +111,7 @@ BSkyPredictions <- BSkyPredict(modelname='{{selected.modelSelection | safe}}', p
 BSkyLoadRefresh("{{dataset.name}}")
 `,
             pre_start_r: JSON.stringify({
-                modelSelection: "BSkyGetAvailableModelsCP(objclasslist ='coxph')",
+                modelSelection: "BSkyGetAvailableModels(objclasslist ='coxph')",
             })
         }
         var objects = {

@@ -183,7 +183,7 @@ BSkyLoadRefresh("{{dataset.name}}")
                     extraction: "NoPrefix|UseComma",
                     options: ["adaboost", "All_Models", "BinaryTree", "blasso", "C5.0", "drc", "earth", "gbm", "glm", "glmnet", "knn3", "ksvm", "lm", "lmerModLmerTest", "lognet", "mlp", "multinom", "NaiveBayes", "nls", "nn", "nnet", "polr", "randomForest", "RandomForest", "ranger", "real_adaboost", "rlm", "rpart", "rq", "rsnns", "train", "xgb.Booster"],
                     default: "All_Models",
-                    onselect_r: { modelSelection: "BSkyGetAvailableModelsCP( objclasslist = c('{{value}}'))" }
+                    onselect_r: { modelSelection: "BSkyGetAvailableModels( objclasslist = c('{{value}}'))" }
                 })
             },
             modelSelection: {
