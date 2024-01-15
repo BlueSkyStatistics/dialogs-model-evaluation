@@ -12,8 +12,12 @@ var localization = {
         label3: "Predictions and predicted probabilities where applicable are stored in the dataset being scored as new variables with prefix below",
         label4: "**For dependent variables with 2 levels, the 2nd level is treated as the positive level. See Data > Factor Levels > Reorder Levels Manually to change the order of factor levels and rebuild the model.",
         conflevel: "Save confidence intervals for individual predicted values  **(Valid only for linear models (class lm))",
+        rocCurves: "Show ROC curves (**For binary dependent variables only)",
         roctable: "Show ROC table (**For binary dependent variables only)",
+        saveRoctableToDataset: "Save ROC table to a dataset(**For binary dependent variables only)",
+        label6: "**Checking the checkbox above will incur a performance penalty for large datasets.",
         colname: "Specify column name prefix",
+        datasetNameForROC: "Enter a dataset name to store the values in the ROC table.",
         label5: "**Checking the checkbox above will incur a performance penalty for large datasets.",
         level: "Specify the confidence level",
         confusioncheck: "Generate Confusion Matrix",
@@ -135,7 +139,7 @@ if ({{selected.roctable | safe}} && !ROC)
 {
 cat("\\nWe cannot show a ROC curve. \nThis may be due to the model type not supporting predicted probabilities or the dependent variable not having 2 levels")
 }
-if (ROC && {{selected.roctable | safe}})
+if (ROC && ({{selected.roctable | safe}} || {{selected.rocCurves | safe}}) || {{selected.saveRoctableToDataset | safe}})
 {
 #Added the numeric condition 08/15/2020 to address ROC table not working with Model Fitting -> Extreme Boosting
     if( class(BSkyPredictions[[3]] )  == 'logical'  || class(BSkyPredictions[[3]] )  == 'numeric')
@@ -149,26 +153,38 @@ if (ROC && {{selected.roctable | safe}})
     BSkyPredictions[[3]] = as.factor( BSkyPredictions[[3]] )
     }
     }
-    results <-createROCTable(predictedprobs =BSkyPredictions[[2]],dependentvariable =BSkyPredictions[[3]], modelname="{{selected.modelSelection | safe}}",datasetname ="{{dataset.name}}")
-    BSkyFormat(results, singleTableOutputHeader='ROC Table')
-    BSkytemp = data.frame(BSkyPredictions[[2]], BSkyPredictions[[3]])
-    BSkytemp = na.omit(BSkytemp)
-    pr <- ROCR::prediction(BSkytemp[,1], BSkytemp[,2], label.ordering = levels(BSkyPredictions[[3]]))
-    attributes(pr)$cutoffs[[1]][attributes(pr)$cutoffs[[1]]==Inf]<-1
-    prf <- ROCR::performance(pr, measure = "tpr", x.measure = "fpr")
-    attributes(prf)$cutoffs[[1]][attributes(prf)$cutoffs[[1]]==Inf]<-1   
-    plot(prf, main = "ROC Curve")
-    auc <- ROCR::performance(pr, measure = "auc")
-    auc <- auc@y.values[[1]]
-    cat( paste("The area under the curve (AUC) is",auc,sep=" "))
-    perf <- ROCR::performance(pr, "sens", "spec")
-    plot(perf, colorize=TRUE, lwd= 3, main="... Sensitivity/Specificity plots ...")
+    if ({{selected.roctable | safe}} || {{selected.saveRoctableToDataset | safe}})
+    {
+        results <-createROCTable(predictedprobs =BSkyPredictions[[2]],dependentvariable =BSkyPredictions[[3]], modelname="{{selected.modelSelection | safe}}",datasetname ="{{dataset.name}}")
+    }
+    {{if (options.selected.saveRoctableToDataset == "TRUE")}}.GlobalEnv\${{selected.datasetNameForROC | safe}} = results{{/if}}
+    
+    if ({{selected.rocCurves | safe}})
+    {
+        BSkytemp = data.frame(BSkyPredictions[[2]], BSkyPredictions[[3]])
+        BSkytemp = na.omit(BSkytemp)
+        pr <- ROCR::prediction(BSkytemp[,1], BSkytemp[,2], label.ordering = levels(BSkyPredictions[[3]]))
+        attributes(pr)$cutoffs[[1]][attributes(pr)$cutoffs[[1]]==Inf]<-1
+        prf <- ROCR::performance(pr, measure = "tpr", x.measure = "fpr")
+        attributes(prf)$cutoffs[[1]][attributes(prf)$cutoffs[[1]]==Inf]<-1   
+        plot(prf, main = "ROC Curve")
+        auc <- ROCR::performance(pr, measure = "auc")
+        auc <- auc@y.values[[1]]
+        cat( paste("The area under the curve (AUC) is",auc,sep=" "))
+        perf <- ROCR::performance(pr, "sens", "spec")
+        plot(perf, colorize=TRUE, lwd= 3, main="... Sensitivity/Specificity plots ...")
+    }
+    if ({{selected.roctable | safe}})
+    {
+        BSkyFormat(results, singleTableOutputHeader='ROC Table')
+    }
     if( exists("BSkytemp")) rm(BSkytemp)
 }
 }
 )
 #Refresh dataset
 BSkyLoadRefresh("{{dataset.name}}")
+{{if (options.selected.saveRoctableToDataset == "TRUE")}} BSkyLoadRefresh("{{selected.datasetNameForROC | safe}}"){{/if}}
 `,
             pre_start_r: JSON.stringify({
                 modelSelection: "BSkyGetAvailableModels(objclasslist ='All_Models', suppress = \"coxph\")",
@@ -210,6 +226,19 @@ BSkyLoadRefresh("{{dataset.name}}")
                     extraction: "TextAsIs",
                     type: "character",
                     required: true,
+                    value: ""
+                })
+            },
+            datasetNameForROC: {
+                el: new input(config, {
+                    no: 'datasetNameForROC',
+                    label: localization.en.datasetNameForROC,
+                    placeholder: "",
+                    extraction: "TextAsIs",
+                    type: "character",
+                    style: "ml-4",
+                    width: "w-50",
+                    overwrite: "dataset",
                     value: ""
                 })
             },
@@ -258,20 +287,46 @@ BSkyLoadRefresh("{{dataset.name}}")
                     default: ""
                 })
             }, 
-            roctable: {
+
+            rocCurves: {
                 el: new checkbox(config, {
-                    label: localization.en.roctable,
-                    no: "roctable",
+                    label: localization.en.rocCurves,
+                    no: "rocCurves",
                     bs_type: "valuebox",
                     extraction: "TextAsIs",
                     true_value: "TRUE",
                     false_value: "FALSE",
                 })
             },
+            roctable: {
+                el: new checkbox(config, {
+                    label: localization.en.roctable,
+                    no: "roctable",
+                    bs_type: "valuebox",
+                    style: "mt-2",
+                    extraction: "TextAsIs",
+                    true_value: "TRUE",
+                    false_value: "FALSE",
+                })
+            },
+            
+            saveRoctableToDataset: {
+                el: new checkbox(config, {
+                    label: localization.en.saveRoctableToDataset,
+                    no: "saveRoctableToDataset",
+                    required:true,
+                    //extraction: "TextAsIs",
+                    extraction: "Boolean",
+                   // true_value: "TRUE",
+                   // false_value: "FALSE",
+                    dependant_objects: ["datasetNameForROC"]
+                })
+            },
             label5: { el: new labelVar(config, { label: localization.en.label5, h: 8, style: "mt-1,ml-2" }) },
+            label6: { el: new labelVar(config, { label: localization.en.label6, h: 8, style: "mt-1,ml-2" }) },
         }
         const content = {
-            items: [objects.filterModels.el.content, objects.modelSelection.el.content, objects.label1.el.content, objects.label12.el.content, objects.label2.el.content, objects.label3.el.content, objects.colname.el.content, objects.conflevel.el.content, objects.level.el.content, objects.confusioncheck.el.content, objects.label4.el.content, objects.levelOfInterest.el.content,objects.roctable.el.content, objects.label5.el.content],
+            items: [objects.filterModels.el.content, objects.modelSelection.el.content, objects.label1.el.content, objects.label12.el.content, objects.label2.el.content, objects.label3.el.content, objects.colname.el.content, objects.conflevel.el.content, objects.level.el.content, objects.confusioncheck.el.content, objects.label4.el.content, objects.levelOfInterest.el.content,objects.rocCurves.el.content,objects.roctable.el.content, objects.label5.el.content,objects.saveRoctableToDataset.el.content, objects.label6.el.content,objects.datasetNameForROC.el.content],
             nav: {
                 name: localization.en.navigation,
                 icon: "icon-y-hat",
@@ -296,7 +351,10 @@ BSkyLoadRefresh("{{dataset.name}}")
                 level: instance.objects.level.el.getVal(),
                 confusioncheck: instance.objects.confusioncheck.el.getVal(),
                 roctable: instance.objects.roctable.el.getVal(),
-                levelOfInterest: instance.objects.levelOfInterest.el.getVal()
+                saveRoctableToDataset: instance.objects.saveRoctableToDataset.el.getVal()?"TRUE":"FALSE",
+                rocCurves: instance.objects.rocCurves.el.getVal(),
+                levelOfInterest: instance.objects.levelOfInterest.el.getVal(),
+                datasetNameForROC: instance.objects.datasetNameForROC.el.getVal(),
             }
         }
         if (code_vars.selected.label12.substr(0, 7) != "SUCCESS") {
