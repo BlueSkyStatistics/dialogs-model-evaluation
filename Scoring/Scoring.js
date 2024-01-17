@@ -292,6 +292,7 @@ BSkyLoadRefresh("{{dataset.name}}")
                 el: new checkbox(config, {
                     label: localization.en.rocCurves,
                     no: "rocCurves",
+                    newline: true,
                     bs_type: "valuebox",
                     extraction: "TextAsIs",
                     true_value: "TRUE",
@@ -302,6 +303,7 @@ BSkyLoadRefresh("{{dataset.name}}")
                 el: new checkbox(config, {
                     label: localization.en.roctable,
                     no: "roctable",
+                    newline: true,
                     bs_type: "valuebox",
                     style: "mt-2",
                     extraction: "TextAsIs",
