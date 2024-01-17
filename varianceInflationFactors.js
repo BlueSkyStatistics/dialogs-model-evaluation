@@ -3,7 +3,7 @@ var localization = {
     en: {
         title: "Variance Inflation Factors",
         navigation: "VIF",
-        modelselector1: "Select a model of one of the following classes (class in parenthesis) Linear model (lm) Generalized linear models (glm) Ordered Logistic Or Probit Regression (polr) Multinomial Log-Linear Models (multinom)",
+        modelselector1: "Select a model of one of the following classes (class in parenthesis) Linear model (lm), Generalized linear models (glm), Ordered Logistic Or Probit Regression (polr), Multinomial Log-Linear Models (multinom), Survival (coxph)",
         help: {
             title: "Variance Inflation Factors",
             r_help: "help(vif, package='car')",
@@ -81,7 +81,7 @@ BSkyFormat(obj, singleTableOutputHeader="Variance-inflation factors")
 )           
             `,
             pre_start_r: JSON.stringify({
-                modelselector1: "BSkyGetAvailableModels(c(\"lm\", \"glm\",\"polr\",\"multinom\"))",
+                modelselector1: "BSkyGetAvailableModels(c(\"lm\", \"glm\",\"polr\",\"multinom\", \"coxph\"))",
             })
         }
         var objects = {
