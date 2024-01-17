@@ -15,7 +15,7 @@ var localization = {
             r_help: "help(confint,package='stats')",
             body: `
                 <b>Description</b></br>
-Computes confidence intervals for one or more parameters in a fitted model. There is a default and a method for objects inheriting from class "lm". 
+Computes confidence intervals for one or more parameters in a fitted model. There is a default and a method for objects inheriting from class "lm". lm and coxph models only use the Wald method.
 <br/>
 <b>Usage</b>
 <br/>
@@ -85,7 +85,7 @@ local(
 {
 if ( "train" %in% class({{selected.modelselector1 | safe}}) )
 {
-tmpbsky <- stats::confint({{selected.modelselector1 | safe}}$finalModel, level={{selected.conlevel | safe}}, type="{{selected.grp1 | safe}}")
+tmpbsky <- {{selected.grp1 | safe}}({{selected.modelselector1 | safe}}$finalModel, level={{selected.conlevel | safe}})
 if ("lm" %in% class({{selected.modelselector1 | safe}}$finalModel) || "glm" %in% class({{selected.modelselector1 | safe}}$finalModel)  ||  "polr" %in% class({{selected.modelselector1 | safe}}$finalModel) || "nls" %in% class({{selected.modelselector1 | safe}}$finalModel) ||"coxph" %in% class({{selected.modelselector1 | safe}}$finalModel) ) 
 {
 BSkyFormat(tmpbsky, singleTableOutputHeader =paste ("Confidence Interval (level = ",{{selected.conlevel | safe}}, ")", sep="", collapse="")  )
@@ -95,7 +95,7 @@ print(knitr::kable(tmpbsky))
 }
 } else
 {
-tmpbsky <- stats::confint({{selected.modelselector1 | safe}}, level={{selected.conlevel | safe}}, type="{{selected.grp1 | safe}}")
+tmpbsky <- {{selected.grp1 | safe}}({{selected.modelselector1 | safe}}, level={{selected.conlevel | safe}})
 if ("lm" %in% class({{selected.modelselector1 | safe}}) || "glm" %in% class({{selected.modelselector1 | safe}}) ||  "polr" %in% class({{selected.modelselector1 | safe}})  || "nls" %in% class({{selected.modelselector1 | safe}}) ||"coxph" %in% class({{selected.modelselector1 | safe}} ) )
 { 
 BSkyFormat(tmpbsky, singleTableOutputHeader =paste ("Confidence Interval (level = ",{{selected.conlevel | safe}}, ")", sep="", collapse="")  )
@@ -139,10 +139,11 @@ print(knitr::kable(tmpbsky))
             },
             label3: { el: new labelVar(config, { label: localization.en.label3, h: 6 }) },
             lr: {
-                el: new radioButton(config, { label: localization.en.lr, no: "grp1", increment: "lr", value: "LR", state: "checked", extraction: "ValueAsIs" })
+               // el: new radioButton(config, { label: localization.en.lr, no: "grp1", increment: "lr", value: "LR", state: "checked", extraction: "ValueAsIs" })
+               el: new radioButton(config, { label: localization.en.lr, no: "grp1", increment: "lr", value: "stats::confint", state: "checked", extraction: "ValueAsIs" })
             },
             wald: {
-                el: new radioButton(config, { label: localization.en.wald, no: "grp1", increment: "wald", value: "Wald", state: "", extraction: "ValueAsIs" })
+                el: new radioButton(config, { label: localization.en.wald, no: "grp1", increment: "wald", value: "stats::confint.default", state: "", extraction: "ValueAsIs" })
             },
         }
         const content = {
