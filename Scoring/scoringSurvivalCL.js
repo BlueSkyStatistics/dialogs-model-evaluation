@@ -1,13 +1,13 @@
 
 var localization = {
     en: {
-        title: "Predicted probabilities for survival models",
-        label100: "This dialog is designed to predict the probability of an event occuring at one or more \nspecified follow-up times. \nThe following requirements must be met.\n1. You must have built a cox regression model on a dataset where 1=event, 0=censor. \n2. The dataset that you want to generate predictions for must have all the independent variables used to create \nthe original model (except the follow-up time as you will specify this below). \n3. The timescale used for the follow-up time must match the timescale used to create the original model. \n4. If you want predictions for a single observation, you need to create a new dataset with that observation.",
+        title: "Predicted survival probabilities",
+        label100: "This dialog outputs the predicted survival probability at one or more \nspecified follow-up times. \nThe following requirements must be met.\n1. You must have built a cox regression model on a dataset where 1=event, 0=censor. \n2. The dataset that you want to generate predictions for must have all the independent variables used to create \nthe original model. \n3. The timescale used for the follow-up time must match the timescale used to create the original model. \n4. If you want predictions for a single observation, you need to create a new dataset with that observation.",
         navigation: "Cox scoring",
         filterModels: "Filter models by class",
         modelSelection: "Select a model to score a dataset",
         label1: "Diagnostic tests",
-        followUpTime: "Specify one or more follow-up times e.g. 1200, 1250, a predicted probabilities will be generated for each follow-up time",
+        followUpTime: "Specify one or more follow-up times e.g. 1200, 1250, predicted survival probabilities will be generated for each follow-up time",
         levelOfInterest: "When the variable to predict has 2 levels, specify the level of interest. The confusion matrix and related statistics are displayed with the specified level of interest as the reference",
         label12: "Test results: As soon as a model is selected, we will run tests to see whether dependent variables specified in the model are \navailable in the dataset to be scored. The results will be displayed here",
         label2: "Save survival probabilities.",
