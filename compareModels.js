@@ -126,10 +126,10 @@ title = "Results of running ANOVA with Chisq Test"
 {
 title = "Results of running ANOVA (full against reduced model) with Chisq Test"
 }
-anovaResults  <-anova({{selected.modelselector1 | safe}}, {{selected.modelselector2 | safe}}, test ="Chisq")
+anovaResults  <-anova({{selected.modelselector2 | safe}}, {{selected.modelselector1 | safe}}, test ="Chisq")
 } else
 {
-anovaResults <-anova({{selected.modelselector1 | safe}}, {{selected.modelselector2 | safe}})
+anovaResults <-anova({{selected.modelselector2 | safe}}, {{selected.modelselector1 | safe}})
 }
 if(reducedmodel != " ")
 {
