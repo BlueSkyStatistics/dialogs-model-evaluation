@@ -6,6 +6,7 @@
     "main": "nav.js",
     "version": "1.0.6",
     "author": "BlueSky Statistics",
+	"minBSkyVersion": "8.93",
     "scripts": {},
     "dependencies": {
         "squirrelly": "7.9.2"
