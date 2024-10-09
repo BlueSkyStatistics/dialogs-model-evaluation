@@ -11,7 +11,7 @@ var localization = {
         label2: "Save predicted values and supporting statistics.",
         label3: "Predictions and predicted probabilities where applicable are stored in the dataset being scored as new variables with prefix below",
         label4: "**For dependent variables with 2 levels, the 2nd level is treated as the positive level. See Data > Factor Levels > Reorder Levels Manually to change the order of factor levels and rebuild the model.",
-        conflevel: "Save confidence intervals for individual predicted values  **(Valid only for linear models (class lm))",
+        conflevel: "Save confidence and predicton intervals for individual predicted values  **(Valid only for linear models (class lm))",
         rocCurves: "Show ROC curves (**For binary dependent variables only)",
         roctable: "Show ROC table (**For binary dependent variables only)",
         saveRoctableToDataset: "Save ROC table to a dataset(**For binary dependent variables only)",
