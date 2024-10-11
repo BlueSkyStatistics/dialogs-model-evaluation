@@ -1,35 +1,5 @@
 
-var localization = {
-    en: {
-        title: "Plot A Model",
-        navigation: "Plot a Model",
-        modelselector1: "Select a model of one of the following classes (class in parenthesis) Linear model (lm), Generalized linear models (glm)",
-        help: {
-            title: "Plot A Model",
-            r_help: "help(plot, package ='graphics')",
-            body: `
-                <b>Description</b></br>
-Generic function for plotting of R objects. For more details about the graphical parameter arguments, see par.
-For simple scatter plots, plot.default will be used. However, there are plot methods for many different R objects, including functions, data.frames, density objects, etc. Use methods(plot) and the documentation for these.
-<br/>
-<b>Usage</b>
-<br/>
-<code> 
-plot(object)
-</code> <br/>
-<b>Arguments</b><br/>
-<ul>
-<li>
-object: any R object with a plot method can be provided.
-</li>
-</ul>
-<b>Package</b></br>
-graphics</br>
-<b>Help</b></br>
-For detailed help click on the R icon on the top right hand side of this dialog overlay or run the following command in the R syntax editor help(plot, package ='graphics')
-`}
-    }
-}
+
 
 
 
@@ -38,10 +8,13 @@ For detailed help click on the R icon on the top right hand side of this dialog 
 
 
 class plotAModel extends baseModal {
+    static dialogId = 'plotAModel'
+    static t = baseModal.makeT(plotAModel.dialogId)
+
     constructor() {
         var config = {
-            id: "plotAModel",
-            label: localization.en.title,
+            id: plotAModel.dialogId,
+            label: plotAModel.t('title'),
             splitProcessing:false,
             modalType: "one",
             RCode: `
@@ -61,7 +34,7 @@ class plotAModel extends baseModal {
             modelselector1: {
                 el: new comboBox(config, {
                     no: 'modelselector1',
-                    label: localization.en.modelselector1,
+                    label: plotAModel.t('modelselector1'),
                     multiple: false,
                     required: true,
                     extraction: "NoPrefix|UseComma",
@@ -73,13 +46,22 @@ class plotAModel extends baseModal {
         const content = {
             items: [objects.modelselector1.el.content],
             nav: {
-                name: localization.en.navigation,
+                name: plotAModel.t('navigation'),
                 icon: "icon-gaussian-function",
                 onclick: `r_before_modal("${config.id}")`
             }
         }
         super(config, objects, content);
-        this.help = localization.en.help;
+        
+        this.help = {
+            title: plotAModel.t('help.title'),
+            r_help: "help(data,package='utils')",
+            body: plotAModel.t('help.body')
+        }
+;
     }
 }
-module.exports.item = new plotAModel().render()
+
+module.exports = {
+    render: () => new plotAModel().render()
+}

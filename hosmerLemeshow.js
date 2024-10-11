@@ -1,63 +1,5 @@
 
-var localization = {
-    en: {
-        title: "Hosmer-Lemeshow Test",
-        navigation: "Hosmer-Lemeshow Test",
-        label1: "NOTE: THE ACTIVE DATASET MUST BE THE SAME DATASET USED TO BUILD THE MODEL",
-        modelselector1: "Select a generalized linear model (model of class glm):",
-        destination: "Target variable:",
-        bins: "Number of bins", 
-        help: {
-            title: "Hosmer-Lemeshow Test",
-            r_help: "help(HLgof.test, package='MKmisc')",
-            body: `
-                <b>Description</b></br>
-The function computes Hosmer-Lemeshow goodness of fit tests for C and H statistic as well as the le Cessie-van Houwelingen-Copas-Hosmer unweighted sum of squares test for global goodness of fit.
-<br/>
-<b>Usage</b>
-<br/>
-<code> 
-HLgof.test(fit, obs, ngr = 10, X, verbose = FALSE)
-</code> <br/>
-<b>Arguments</b><br/>
-<ul>
-<li>
-fit: numeric vector with fitted probabilities.
-</li>
-<li>
-obs: numeric vector with observed values.
-</li>
-<li>
-ngr: number of groups for C and H statistic.
-</li>
-<li>
-X: covariate(s) for le Cessie-van Houwelingen-Copas-Hosmer global goodness of fit test.
-</li>
-<li>
-verbose: logical, print intermediate results.
-</li>
-</ul>
-<b>Details</b></br>
-Hosmer-Lemeshow goodness of fit tests are computed; see Lemeshow and Hosmer (1982). If X is specified, the le Cessie-van Houwelingen-Copas-Hosmer unweighted sum of squares test for global goodness of fit is additionally determined; see Hosmer et al. (1997). A more general version of this test is implemented in function residuals.lrm in package rms.</br>
-<b>Value</b><br/>
-A list of test results.
-<b>Examples</b><br/>
-<code> 
-set.seed(111)
-x1 <- factor(sample(1:3, 50, replace = TRUE))</br>
-x2 <- rnorm(50)</br>
-obs <- sample(c(0,1), 50, replace = TRUE)</br>
-fit <- glm(obs ~ x1+x2, family = binomial)</br>
-HLgof.test(fit = fitted(fit), obs = obs)</br>
-HLgof.test(fit = fitted(fit), obs = obs, X = model.matrix(obs ~ x1+x2))</br>
-</code> <br/>
-<b>Package</b></br>
-MKmisc</br>
-<b>Help</b></br>
-For detailed help click on the R icon on the top right hand side of this dialog overlay or run the following command in the R syntax editor help(HLgof.test, package="MKmisc")
-                `}
-    }
-}
+
 
 
 
@@ -68,10 +10,13 @@ For detailed help click on the R icon on the top right hand side of this dialog 
 
 
 class hosmerLemeshow extends baseModal {
+    static dialogId = 'hosmerLemeshow'
+    static t = baseModal.makeT(hosmerLemeshow.dialogId)
+
     constructor() {
         var config = {
-            id: "hosmerLemeshow",
-            label: localization.en.title,
+            id: hosmerLemeshow.dialogId,
+            label: hosmerLemeshow.t('title'),
             splitProcessing:false,
             modalType: "two",
             RCode: `
@@ -97,11 +42,11 @@ if ( "train" %in% class({{selected.modelselector1 | safe}}) )
             })
         }
         var objects = {
-            label1: { el: new labelVar(config, { label: localization.en.label1, h: 6 }) },
+            label1: { el: new labelVar(config, { label: hosmerLemeshow.t('label1'), h: 6 }) },
             modelselector1: {
                 el: new comboBox(config, {
                     no: 'modelselector1',
-                    label: localization.en.modelselector1,
+                    label: hosmerLemeshow.t('modelselector1'),
                     multiple: false,
                     required: true,
                     extraction: "NoPrefix|UseComma",
@@ -112,7 +57,7 @@ if ( "train" %in% class({{selected.modelselector1 | safe}}) )
             content_var: { el: new srcVariableList(config) },
             destination: {
                 el: new dstVariable(config, {
-                    label: localization.en.destination,
+                    label: hosmerLemeshow.t('destination'),
                     no: "destination",
                     filter: "Numeric|Logical|Ordinal|Nominal|Scale",
                     extraction: "Prefix|UseComma",
@@ -122,7 +67,7 @@ if ( "train" %in% class({{selected.modelselector1 | safe}}) )
             bins: {
                 el: new inputSpinner(config, {
                   no: 'bins',
-                  label: localization.en.bins,
+                  label: hosmerLemeshow.t('bins'),
                   min: 2,
                   max: 999999999,
                   step: 1,
@@ -136,13 +81,22 @@ if ( "train" %in% class({{selected.modelselector1 | safe}}) )
             left: [objects.content_var.el.content],
             right: [objects.destination.el.content, objects.bins.el.content],
             nav: {
-                name: localization.en.navigation,
+                name: hosmerLemeshow.t('navigation'),
                 icon: "icon-hl",
                 onclick: `r_before_modal("${config.id}")`
             }
         }
         super(config, objects, content);
-        this.help = localization.en.help;
+        
+        this.help = {
+            title: hosmerLemeshow.t('help.title'),
+            r_help: "help(data,package='utils')",
+            body: hosmerLemeshow.t('help.body')
+        }
+;
     }
 }
-module.exports.item = new hosmerLemeshow().render()
+
+module.exports = {
+    render: () => new hosmerLemeshow().render()
+}

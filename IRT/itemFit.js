@@ -1,56 +1,14 @@
 
-var localization = {
-    en: {
-        title: "Item Fit",
-        navigation: "Item Fit",
-        label1: "Select a model (models of class Rm, dRm, tam.mml, tam.mml.2pl, tam.mml.mfr supported)",
-        label1b : "If no models are available, you need to create a model first by selecting Model Fitting -> IRT",
-        modelselector1: "Select a model",
 
-        help: {
-            title: "Item Fit",
-            r_help: "help(itemfit, package='eRm')",
-            body: `
-                <b>Description</b></br>
-                For models of class Rm or dRm (Created by using IRT->Simple Rasch Model with CML estimation) uses the function itemfit to display Itemfit statistics.
-                <br/>
-                For models of class tam.mml,tam.mml.2pl, tam.mml.2pl, tam.mml.mfr (Created by using IRT->Simple Rasch Model, Partial Credit Model, Rating Scale Model and multi-faceted models (Partial Credit and Rating Scale) with MML estimation uses the function msq.itemfit to Mean Squared Residual Based Item Fit Statistics (Infit, Outfit)
-
-                <br/><br/>
-                <b>Usage</b>
-                <br/>
-                <code>
-                eRm::itemfit(object)
-                </code>
-                <br/>
-                <code>
-                TAM::msq.itemfit(object)
-                </code>
-                <br/><br/>
-                <b>Details</b>
-                <br/>  
-                Run the following from the BlueSky Statistics Syntax editor  help(itemfit, package ='eRm')
-                <br/>
-                Run the following from the BlueSky Statistics Syntax editor help(msq.itemfit, package ='TAM')
-                <br/>
-                The detailed help will launch in your default browser         
-                <br/><br/>
-                <b>Packages</b>
-                <br/>
-                eRm, TAM
-                <br/><br/>
-                <b>Help</b>
-                <br/>
-                help(itemfit, package='eRm')
-                `}
-    }
-}
 
 class itemFit extends baseModal {
+    static dialogId = 'itemFit'
+    static t = baseModal.makeT(itemFit.dialogId)
+
     constructor() {
         var config = {
-            id: "itemFit",
-            label: localization.en.title,
+            id: itemFit.dialogId,
+            label: itemFit.t('title'),
             modalType: "one",
             RCode: `
 require(eRm);
@@ -77,12 +35,12 @@ local({
             })
         }
         var objects = {
-            label1: { el: new labelVar(config, { label: localization.en.label1, h: 6 }) },
-            label1b: { el: new labelVar(config, { label: localization.en.label1b, h: 6 }) },
+            label1: { el: new labelVar(config, { label: itemFit.t('label1'), h: 6 }) },
+            label1b: { el: new labelVar(config, { label: itemFit.t('label1b'), h: 6 }) },
             modelselector1: {
                 el: new comboBox(config, {
                     no: 'modelselector1',
-                    label: localization.en.modelselector1,
+                    label: itemFit.t('modelselector1'),
                     multiple: false,
                     required: true,
                     extraction: "NoPrefix|UseComma",
@@ -94,13 +52,22 @@ local({
         const content = {
             items: [objects.label1.el.content, objects.label1b.el.content, objects.modelselector1.el.content ],
             nav: {
-                name: localization.en.navigation,
+                name: itemFit.t('navigation'),
                 icon: "icon-item_fit",
                 onclick: `r_before_modal("${config.id}")`
             }
         }
         super(config, objects, content);
-        this.help = localization.en.help;
+        
+        this.help = {
+            title: itemFit.t('help.title'),
+            r_help: "help(data,package='utils')",
+            body: itemFit.t('help.body')
+        }
+;
     }
 }
-module.exports.item = new itemFit().render()
+
+module.exports = {
+    render: () => new itemFit().render()
+}
