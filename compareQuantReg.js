@@ -20,8 +20,8 @@ BSkyFormat(BSkyCompRes)
         }
         var objects = {
             label1: { el: new labelVar(config, { label: compareQuantReg.t('label1'), h: 6 }) },
-            label2: { el: new labelVar(config, { label: compareQuantReg.t('label2'), h: 6 }) },
-            label3: { el: new labelVar(config, { label: compareQuantReg.t('label3'), h: 6 }) },
+/*            label2: { el: new labelVar(config, { label: compareQuantReg.t('label2'), h: 6 }) },
+            label3: { el: new labelVar(config, { label: compareQuantReg.t('label3'), h: 6 }) },   */
             label4: { el: new labelVar(config, { label: compareQuantReg.t('label4'), h: 6 }) },
             modelselector1: {
                 el: new comboBox(config, {
