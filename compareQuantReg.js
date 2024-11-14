@@ -52,8 +52,8 @@ BSkyFormat(BSkyCompRes)
         }
         var objects = {
             label1: { el: new labelVar(config, { label: localization.en.label1, h: 6 }) },
-            label2: { el: new labelVar(config, { label: localization.en.label2, h: 6 }) },
-            label3: { el: new labelVar(config, { label: localization.en.label3, h: 6 }) },
+/*            label2: { el: new labelVar(config, { label: localization.en.label2, h: 6 }) },
+            label3: { el: new labelVar(config, { label: localization.en.label3, h: 6 }) },   */
             label4: { el: new labelVar(config, { label: localization.en.label4, h: 6 }) },
             modelselector1: {
                 el: new comboBox(config, {
