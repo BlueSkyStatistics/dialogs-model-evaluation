@@ -304,12 +304,12 @@ BSkyLoadRefresh("{{dataset.name}}")
         }
         if (code_vars.selected.label12.substr(0, 7) != "SUCCESS") {
             let cmd = "cat(\"ERROR: The predictor variables that the model requires for scoring are not available in the dataset.\n Please review the diagnostic message on the dialog.\")";
-            res.push({ cmd: cmd, cgid: newCommandGroup() })
+            res.push({ cmd: cmd, cgid: newCommandGroup(`${instance.config.id}`, `${instance.config.label}`), oriR: instance.config.RCode, code_vars: code_vars })
         }
         else {
             let cmd = instance.dialog.renderR(code_vars)
             cmd = removenewline(cmd);
-            res.push({ cmd: cmd, cgid: newCommandGroup() })
+            res.push({ cmd: cmd, cgid: newCommandGroup(`${instance.config.id}`, `${instance.config.label}`), oriR: instance.config.RCode, code_vars: code_vars })
         }
         return res;
     }
