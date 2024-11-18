@@ -30,7 +30,7 @@ const nav = {
             "icon": "icon-lamp",
             "children": [
                 "./IRT/iCCPlots",
-                "./IRT/itemandTestInfo",
+                "./IRT/itemAndTestInfo",
                 "./IRT/itemFit",
                 "./IRT/likelihoodRatiosPlotBetas",
                 "./IRT/personFit",
