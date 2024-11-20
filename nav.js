@@ -59,7 +59,8 @@ const nav = {
                 "./summarizeNModels"
             ]
         },
-        "./varianceInflationFactors"
+        "./varianceInflationFactors",
+		"./deleteNModels"
     ]
 }
 
