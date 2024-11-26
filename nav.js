@@ -1,11 +1,12 @@
-const nav = {
-    "name": "Model Evaluation",
+// const i18next = require("i18next");
+const nav = () => ({
+    "name": i18next.t('modelevaluation_top_level_title', {ns: 'menutoolbar'}),
     "tab": "model_statistics",
     "buttons": [
         "./addStatisticsToObservations",
         "./anovaLikelihoodRatio",
         {
-            "name": "Compare",
+            "name": i18next.t('modelevaluation_Compare', {ns: 'menutoolbar'}),
             "icon": "icon-compare",
             "children": [
                 "./compareModels",
@@ -16,7 +17,7 @@ const nav = {
         },
         "./confidenceInterval",
         {
-            "name": "Fit",
+            "name": i18next.t('modelevaluation_Fit', {ns: 'menutoolbar'}),
             "icon": "icon-ruler",
             "children": [
                 "./AIC",
@@ -26,11 +27,11 @@ const nav = {
             ]
         },
         {
-            "name": "IRT",
+            "name": i18next.t('modelevaluation_IRT', {ns: 'menutoolbar'}),
             "icon": "icon-lamp",
             "children": [
                 "./IRT/iCCPlots",
-                "./IRT/itemandTestInfo",
+                "./IRT/itemAndTestInfo",
                 "./IRT/itemFit",
                 "./IRT/likelihoodRatiosPlotBetas",
                 "./IRT/personFit",
@@ -41,7 +42,7 @@ const nav = {
         "./bonFerroniOutlierTest",
         "./plotAModel",
         {
-            "name": "Predict",
+            "name": i18next.t('modelevaluation_Predict', {ns: 'menutoolbar'}),
             "icon": "icon-y-hat",
             "children": [
                 "./Scoring/Scoring",
@@ -50,7 +51,7 @@ const nav = {
         },
         "./stepwise",
         {
-            "name": "Summarize",
+            "name": i18next.t('modelevaluation_Summarize', {ns: 'menutoolbar'}),
             "icon": "icon-sigma",
             "children": [
                 "./modelLevelStatistics",
@@ -62,6 +63,9 @@ const nav = {
         "./varianceInflationFactors",
 		"./deleteNModels"
     ]
-}
+})
 
-module.exports.nav = nav
+module.exports = {
+    nav: nav(),
+    render: () => nav()
+}

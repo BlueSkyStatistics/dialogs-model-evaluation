@@ -19,39 +19,16 @@ class modelLevelStatistics extends baseModal {
             splitProcessing:false,
             RCode: `
 require(broom)
-require(equatiomatic)
-
-
-
-	if(any(c("lm","glm") %in% class({{selected.modelselector1 | safe}})[1]))
-	{
-		{{if (options.selected.showModelEquationChk === "TRUE")}}
-			#Display theoretical model
-			{{selected.modelselector1 | safe}} %>%
-				equatiomatic::extract_eq(raw_tex = FALSE,
-					wrap = TRUE, intercept = "alpha", ital_vars = FALSE) %>%
-					BSkyFormat()       
-
-			#Display coefficients
-			{{selected.modelselector1 | safe}} %>%
-				equatiomatic::extract_eq(use_coefs = TRUE,
-				wrap = TRUE,  ital_vars = FALSE, coef_digits = BSkyGetDecimalDigitSetting()) %>%
-				   BSkyFormat()
-		{{/if}}
-		{{selected.modelselector1 | safe}} %>% 
-			  BSkyFormat(outputTableIndex = c(1),  perTableFooter = paste("Model Level Statistics for model {{selected.modelselector1 | safe}}"))
-	} else {
-		if("train" %in% class({{selected.modelselector1 | safe}}) )
-		{
-			BSkyFormat(as.data.frame({{selected.modelselector1 | safe}}$finalModel %>% glance() ),singleTableOutputHeader = "Model Level Statistics for model {{selected.modelselector1 | safe}}" )
-		} else {
-			BSkyFormat(as.data.frame({{selected.modelselector1 | safe}}%>% glance() ),singleTableOutputHeader = "Model Level Statistics for model {{selected.modelselector1 | safe}}" )
-		} 
-	}
-				   
+if ( "train" %in% class({{selected.modelselector1 | safe}}) )
+{
+BSkyFormat(as.data.frame({{selected.modelselector1 | safe}}$finalModel %>% glance() ),singleTableOutputHeader = "Model Level Statistics for model {{selected.modelselector1 | safe}}" )
+} else
+{
+BSkyFormat(as.data.frame({{selected.modelselector1 | safe}}%>% glance() ),singleTableOutputHeader = "Model Level Statistics for model {{selected.modelselector1 | safe}}" )
+}         
 `,
             pre_start_r: JSON.stringify({
-                modelselector1: "BSkyGetAvailableModels(c(\"loess\",\"lm\", \"glm\",\"multinom\",\"polr\",\"glmnet\",\"rlm\",\"rq\",\"lognet\",\"coxph\",\"lme\",\"survreg\",\"survfit\",\"factanal\", \"lmerModLmerTest\"))",
+                modelselector1: "BSkyGetAvailableModels(c(\"lm\", \"glm\",\"multinom\",\"polr\",\"glmnet\",\"rlm\",\"rq\",\"lognet\",\"coxph\",\"lme\",\"survreg\",\"survfit\",\"factanal\", \"lmerModLmerTest\"))",
             })
         }
         var objects = {
@@ -68,23 +45,9 @@ require(equatiomatic)
                     default: ""
                 })
             },
-			showModelEquationChk: {
-                el: new checkbox(config, {
-                    label: modelLevelStatistics.t('showModelEquationChk'), 
-					no: "showModelEquationChk",
-                    bs_type: "valuebox",
-                    //style: "mt-2 mb-3",
-					//style: "ml-5",
-                    extraction: "BooleanValue",
-                    true_value: "TRUE",
-                    false_value: "FALSE",
-					//state: "checked",
-					newline: true,
-                })
-            },
         }
         const content = {
-            items: [objects.label1.el.content, objects.label2.el.content, objects.modelselector1.el.content,objects.showModelEquationChk.el.content],
+            items: [objects.label1.el.content, objects.label2.el.content, objects.modelselector1.el.content],
             nav: {
                 name: modelLevelStatistics.t('navigation'),
                 icon: "icon-model_statistics",
