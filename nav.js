@@ -1,12 +1,12 @@
-// const i18next = require("i18next");
+let t = getT('menutoolbar')
 const nav = () => ({
-    "name": i18next.t('modelevaluation_top_level_title', {ns: 'menutoolbar'}),
+    "name": t('modelevaluation_top_level_title'),// {ns: 'menutoolbar'}),
     "tab": "model_statistics",
     "buttons": [
         "./addStatisticsToObservations",
         "./anovaLikelihoodRatio",
         {
-            "name": i18next.t('modelevaluation_Compare', {ns: 'menutoolbar'}),
+            "name": t('modelevaluation_Compare'),// {ns: 'menutoolbar'}),
             "icon": "icon-compare",
             "children": [
                 "./compareModels",
@@ -17,7 +17,7 @@ const nav = () => ({
         },
         "./confidenceInterval",
         {
-            "name": i18next.t('modelevaluation_Fit', {ns: 'menutoolbar'}),
+            "name": t('modelevaluation_Fit'),// {ns: 'menutoolbar'}),
             "icon": "icon-ruler",
             "children": [
                 "./AIC",
@@ -27,7 +27,7 @@ const nav = () => ({
             ]
         },
         {
-            "name": i18next.t('modelevaluation_IRT', {ns: 'menutoolbar'}),
+            "name": t('modelevaluation_IRT'),// {ns: 'menutoolbar'}),
             "icon": "icon-lamp",
             "children": [
                 "./IRT/iCCPlots",
@@ -42,7 +42,7 @@ const nav = () => ({
         "./bonFerroniOutlierTest",
         "./plotAModel",
         {
-            "name": i18next.t('modelevaluation_Predict', {ns: 'menutoolbar'}),
+            "name": t('modelevaluation_Predict'),// {ns: 'menutoolbar'}),
             "icon": "icon-y-hat",
             "children": [
                 "./Scoring/Scoring",
@@ -51,7 +51,7 @@ const nav = () => ({
         },
         "./stepwise",
         {
-            "name": i18next.t('modelevaluation_Summarize', {ns: 'menutoolbar'}),
+            "name": t('modelevaluation_Summarize'),// {ns: 'menutoolbar'}),
             "icon": "icon-sigma",
             "children": [
                 "./modelLevelStatistics",
