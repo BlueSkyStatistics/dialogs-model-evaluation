@@ -21,23 +21,28 @@ class stepwise extends baseModal {
             RCode: `
 require(MASS)
 require(RcmdrMisc)
-results <-ModelMatchesDataset('{{selected.modelselector1 | safe}}', '{{dataset.name}}', NAinVarsCheck=TRUE ) 
-if ( results$success ==TRUE)
+if ("coxph" %in% class({{selected.modelselector1 | safe}}))
 {
-if ( "train" %in% class({{selected.modelselector1 | safe}}) )
+        RcmdrMisc::stepwise({{selected.modelselector1 | safe}}, direction="forward/backward", criterion="{{selected.rgrp | safe}}")
+} else
 {
-result <- BSkyStepAIC({{selected.modelselector1 | safe}}$finalModel,  direction='{{selected.dirgrp | safe}}', criterion='{{selected.rgrp | safe}}')
-BSkyFormat(result)
-}
-else
-{
-result <- BSkyStepAIC({{selected.modelselector1 | safe}},  direction='{{selected.dirgrp | safe}}', criterion='{{selected.rgrp | safe}}')
-BSkyFormat(result)
-}
+    results <-ModelMatchesDataset('{{selected.modelselector1 | safe}}', '{{dataset.name}}', NAinVarsCheck=TRUE ) 
+    if ( results$success ==TRUE)
+    {
+        if ( "train" %in% class({{selected.modelselector1 | safe}}) )
+        {
+            result <- BSkyStepAIC({{selected.modelselector1 | safe}}$finalModel,  direction='{{selected.dirgrp | safe}}', criterion='{{selected.rgrp | safe}}')
+            BSkyFormat(result)
+        }
+        else {
+            result <- BSkyStepAIC({{selected.modelselector1 | safe}},  direction='{{selected.dirgrp | safe}}', criterion='{{selected.rgrp | safe}}')
+            BSkyFormat(result)
+        }
+    }
 }
 `,
             pre_start_r: JSON.stringify({
-                modelselector1: "BSkyGetAvailableModels(c(\"lm\", \"glm\", \"multinom\",\"nnet\",\"polr\"), returnClassTrain = FALSE)",
+                modelselector1: "BSkyGetAvailableModels(c(\"lm\", \"glm\", \"multinom\",\"nnet\",\"polr\", \"coxph\"), returnClassTrain = FALSE)",
             })
         }
         var objects = {
