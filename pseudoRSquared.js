@@ -59,4 +59,8 @@ BSkyFormat(pscl::pR2({{selected.modelselector1 | safe}}), singleTableOutputHeade
 ;
     }
 }
-module.exports.item = new pseudoRSquared().render()
+
+module.exports = {
+    render: () => new pseudoRSquared().render()
+}
+

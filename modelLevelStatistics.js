@@ -45,13 +45,19 @@ require(equatiomatic)
 		{
 			BSkyFormat(as.data.frame({{selected.modelselector1 | safe}}$finalModel %>% glance() ),singleTableOutputHeader = "Model Level Statistics for model {{selected.modelselector1 | safe}}" )
 		} else {
+			{{if (options.selected.showModelEquationChk === "TRUE")}}
+				if(exists("call", where = ({{selected.modelselector1 | safe}}))){
+					# Format the model formula
+					cat(paste0("{{selected.modelselector1 | safe}}", " = ", paste(deparse({{selected.modelselector1 | safe}}\$call), collapse = "\n")), sep = "\n")
+				}
+			{{/if}}
 			BSkyFormat(as.data.frame({{selected.modelselector1 | safe}}%>% glance() ),singleTableOutputHeader = "Model Level Statistics for model {{selected.modelselector1 | safe}}" )
 		} 
 	}
 				   
 `,
             pre_start_r: JSON.stringify({
-                modelselector1: "BSkyGetAvailableModels(c(\"loess\",\"lm\", \"glm\",\"multinom\",\"polr\",\"glmnet\",\"rlm\",\"rq\",\"lognet\",\"coxph\",\"lme\",\"survreg\",\"survfit\",\"factanal\", \"lmerModLmerTest\"))",
+                modelselector1: "BSkyGetAvailableModels(c(\"loess\",\"lm\", \"glm\",\"multinom\",\"polr\",\"glmnet\",\"rlm\",\"rq\",\"lognet\",\"coxph\",\"lme\",\"survreg\",\"survfit\",\"flexsurvreg\",\"factanal\", \"lmerModLmerTest\"))",
             })
         }
         var objects = {
