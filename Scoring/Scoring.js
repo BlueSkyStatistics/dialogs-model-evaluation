@@ -169,7 +169,7 @@ BSkyLoadRefresh("{{dataset.name}}")
                     min: 0,
                     max: 1,
                     style: "ml-3",
-                    step: 0.05,
+                    step: 0.0001,
                     value: 0.95,
                     extraction: "NoPrefix|UseComma"
                 })
@@ -246,13 +246,7 @@ BSkyLoadRefresh("{{dataset.name}}")
             }
         }
         super(config, objects, content);
-        
-        this.help = {
-            title: Scoring.t('help.title'),
-            r_help: "help(data,package='utils')",
-            body: Scoring.t('help.body')
-        }
-;
+        this.help = Scoring.t('help');
     }
     prepareExecution(instance) {
         var res = [];
