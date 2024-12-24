@@ -260,7 +260,7 @@ BSkyLoadRefresh("{{dataset.name}}")
                     min: 0,
                     max: 1,
                     style: "ml-3",
-                    step: 0.05,
+                    step: 0.0001,
                     value: 0.95,
                     extraction: "NoPrefix|UseComma"
                 })
