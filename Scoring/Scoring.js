@@ -247,6 +247,11 @@ BSkyLoadRefresh("{{dataset.name}}")
         }
         super(config, objects, content);
         this.help = Scoring.t('help');
+        this.help = {
+            title: Scoring.t('help.title'),
+            r_help: "help(data,package='utils')",
+            body: Scoring.t('help.body')
+        }		
     }
     prepareExecution(instance) {
         var res = [];
