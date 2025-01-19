@@ -170,6 +170,7 @@ if (ROC && ({{selected.roctable | safe}} || {{selected.rocCurves | safe}}) || {{
         plot(prf, main = "ROC Curve")
         auc <- ROCR::performance(pr, measure = "auc")
         auc <- auc@y.values[[1]]
+        auc <- base::round(auc, digits = BSkyGetDecimalDigitSetting())
         cat( paste("The area under the curve (AUC) is",auc,sep=" "))
         perf <- ROCR::performance(pr, "sens", "spec")
         plot(perf, colorize=TRUE, lwd= 3, main="... Sensitivity/Specificity plots ...")
