@@ -53,7 +53,7 @@ BSkyFormat(pscl::pR2({{selected.modelselector1 | safe}}), singleTableOutputHeade
         
         this.help = {
             title: pseudoRSquared.t('help.title'),
-            r_help: "help(data,package='utils')",
+            r_help: pseudoRSquared.t('help.r_help'),  //r_help: "help(data,package='utils')",
             body: pseudoRSquared.t('help.body')
         }
 ;

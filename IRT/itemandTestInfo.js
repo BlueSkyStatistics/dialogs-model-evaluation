@@ -46,7 +46,7 @@ plotINFO({{selected.modelselector1 | safe}}, theta = seq(-4, 4,length.out = 1001
         
         this.help = {
             title: itemAndTestInfo.t('help.title'),
-            r_help: "help(data,package='utils')",
+            r_help: itemAndTestInfo.t('help.r_help'),  //r_help: "help(data,package='utils')",
             body: itemAndTestInfo.t('help.body')
         }
 ;

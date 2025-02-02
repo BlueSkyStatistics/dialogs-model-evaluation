@@ -63,7 +63,7 @@ BSkyFormat(obj, singleTableOutputHeader="Variance-inflation factors")
         
         this.help = {
             title: varianceInflationFactors.t('help.title'),
-            r_help: "help(data,package='utils')",
+            r_help: varianceInflationFactors.t('help.r_help'),  //r_help: "help(data,package='utils')",
             body: varianceInflationFactors.t('help.body')
         }
 ;

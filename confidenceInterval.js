@@ -99,7 +99,7 @@ print(knitr::kable(tmpbsky))
         
         this.help = {
             title: confidenceInterval.t('help.title'),
-            r_help: "help(data,package='utils')",
+            r_help: confidenceInterval.t('help.r_help'),  //r_help: "help(data,package='utils')",
             body: confidenceInterval.t('help.body')
         }
 ;

@@ -58,7 +58,7 @@ BSkyFormat(BSkyComparisonResults, singleTableOutputHeader ="Chi-Squared Differen
         
         this.help = {
             title: compareNModelsSEM.t('help.title'),
-            r_help: "help(data,package='utils')",
+            r_help: compareNModelsSEM.t('help.r_help'),  //r_help: "help(data,package='utils')",
             body: compareNModelsSEM.t('help.body')
         }
 ;

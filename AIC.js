@@ -54,7 +54,7 @@ class AIC extends baseModal {
         
         this.help = {
             title: AIC.t('help.title'),
-            r_help: "help(data,package='utils')",
+            r_help: AIC.t('help.r_help'),  //r_help: "help(data,package='utils')",
             body: AIC.t('help.body')
         }
 ;

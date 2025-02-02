@@ -109,7 +109,7 @@ BSkyFormat(as.data.frame(lrtestResults), singleTableOutputHeader = "Likelihood R
         
         this.help = {
             title: compareModels.t('help.title'),
-            r_help: "help(data,package='utils')",
+            r_help: compareModels.t('help.r_help'),  //r_help: "help(data,package='utils')",
             body: compareModels.t('help.body')
         }
 ;

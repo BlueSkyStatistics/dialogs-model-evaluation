@@ -59,7 +59,7 @@ print( car::outlierTest({{selected.modelselector1 | safe}}))
         
         this.help = {
             title: bonFerroniOutlierTest.t('help.title'),
-            r_help: "help(data,package='utils')",
+            r_help: bonFerroniOutlierTest.t('help.r_help'),  //r_help: "help(data,package='utils')",
             body: bonFerroniOutlierTest.t('help.body')
         }
 ;

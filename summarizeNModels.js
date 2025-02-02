@@ -57,7 +57,7 @@ BSkyFormat(hout)
         
         this.help = {
             title: summarizeNModels.t('help.title'),
-            r_help: "help(data,package='utils')",
+            r_help: summarizeNModels.t('help.r_help'),  //r_help: "help(data,package='utils')",
             body: summarizeNModels.t('help.body')
         }
 ;

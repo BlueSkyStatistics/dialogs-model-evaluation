@@ -101,7 +101,7 @@ require(equatiomatic)
         
         this.help = {
             title: modelLevelStatistics.t('help.title'),
-            r_help: "help(data,package='utils')",
+            r_help: modelLevelStatistics.t('help.r_help'),  //r_help: "help(data,package='utils')",
             body: modelLevelStatistics.t('help.body')
         }
 ;

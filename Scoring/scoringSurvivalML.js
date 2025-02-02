@@ -199,7 +199,7 @@ BSkyLoadRefresh("{{dataset.name}}")
         
         this.help = {
             title: scoringSurvivalML.t('help.title'),
-            r_help: "help(data,package='utils')",
+            r_help: scoringSurvivalML.t('help.r_help'),  //r_help: "help(data,package='utils')",
             body: scoringSurvivalML.t('help.body')
         }
 ;

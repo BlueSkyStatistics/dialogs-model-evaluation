@@ -50,7 +50,7 @@ rm({{selected.modelselector1 | safe}})
         
         this.help = {
             title: deleteNModels.t('help.title'),
-            r_help: "help(data,package='utils')",
+            r_help: deleteNModels.t('help.r_help'),  //r_help: "help(data,package='utils')",
             body: deleteNModels.t('help.body')
         }
 ;

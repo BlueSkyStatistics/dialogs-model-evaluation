@@ -79,6 +79,7 @@ if (ROC && ({{selected.roctable | safe}} || {{selected.rocCurves | safe}}) || {{
         plot(prf, main = "ROC Curve")
         auc <- ROCR::performance(pr, measure = "auc")
         auc <- auc@y.values[[1]]
+        auc <- base::round(auc, digits = BSkyGetDecimalDigitSetting())
         cat( paste("The area under the curve (AUC) is",auc,sep=" "))
         perf <- ROCR::performance(pr, "sens", "spec")
         plot(perf, colorize=TRUE, lwd= 3, main="... Sensitivity/Specificity plots ...")
@@ -246,12 +247,13 @@ BSkyLoadRefresh("{{dataset.name}}")
             }
         }
         super(config, objects, content);
-        this.help = Scoring.t('help');
+        
         this.help = {
             title: Scoring.t('help.title'),
-            r_help: "help(data,package='utils')",
+            r_help: Scoring.t('help.r_help'),  //r_help: "help(data,package='utils')",
             body: Scoring.t('help.body')
-        }		
+        }
+;
     }
     prepareExecution(instance) {
         var res = [];

@@ -55,7 +55,7 @@ print(summary({{selected.modelselector1 | safe}}))
         
         this.help = {
             title: summarizeAModel.t('help.title'),
-            r_help: "help(data,package='utils')",
+            r_help: summarizeAModel.t('help.r_help'),  //r_help: "help(data,package='utils')",
             body: summarizeAModel.t('help.body')
         }
 ;

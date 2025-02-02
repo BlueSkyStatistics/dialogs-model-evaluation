@@ -92,7 +92,7 @@ BSkyFormat(as.data.frame(lrtestResults), singleTableOutputHeader = "Likelihood R
         
         this.help = {
             title: anovaLikelihoodRatio.t('help.title'),
-            r_help: "help(data,package='utils')",
+            r_help: anovaLikelihoodRatio.t('help.r_help'),  //r_help: "help(data,package='utils')",
             body: anovaLikelihoodRatio.t('help.body')
         }
 ;

@@ -57,7 +57,7 @@ BSkyFormat(hout)
         
         this.help = {
             title: compareNModels.t('help.title'),
-            r_help: "help(data,package='utils')",
+            r_help: compareNModels.t('help.r_help'),  //r_help: "help(data,package='utils')",
             body: compareNModels.t('help.body')
         }
 ;

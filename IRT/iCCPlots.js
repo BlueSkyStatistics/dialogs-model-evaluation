@@ -151,7 +151,7 @@ if (classOfModel =="Rm" || classOfModel =="dRm")
         
         this.help = {
             title: iCCPlots.t('help.title'),
-            r_help: "help(data,package='utils')",
+            r_help: iCCPlots.t('help.r_help'),  //r_help: "help(data,package='utils')",
             body: iCCPlots.t('help.body')
         }
 ;

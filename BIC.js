@@ -54,7 +54,7 @@ class BIC extends baseModal {
         
         this.help = {
             title: BIC.t('help.title'),
-            r_help: "help(data,package='utils')",
+            r_help: BIC.t('help.r_help'),  //r_help: "help(data,package='utils')",
             body: BIC.t('help.body')
         }
 ;

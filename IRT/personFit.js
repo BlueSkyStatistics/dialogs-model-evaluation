@@ -98,7 +98,7 @@ local({
         
         this.help = {
             title: personFit.t('help.title'),
-            r_help: "help(data,package='utils')",
+            r_help: personFit.t('help.r_help'),  //r_help: "help(data,package='utils')",
             body: personFit.t('help.body')
         }
 ;

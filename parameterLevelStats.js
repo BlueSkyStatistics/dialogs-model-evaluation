@@ -59,7 +59,7 @@ BSkyFormat(as.data.frame({{selected.modelselector1 | safe}}%>% tidy() ),singleTa
         
         this.help = {
             title: parameterLevelStats.t('help.title'),
-            r_help: "help(data,package='utils')",
+            r_help: parameterLevelStats.t('help.r_help'),  //r_help: "help(data,package='utils')",
             body: parameterLevelStats.t('help.body')
         }
 ;

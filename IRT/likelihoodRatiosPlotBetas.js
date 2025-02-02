@@ -92,7 +92,7 @@ local({
         
         this.help = {
             title: likelihoodRatiosPlotBetas.t('help.title'),
-            r_help: "help(data,package='utils')",
+            r_help: likelihoodRatiosPlotBetas.t('help.r_help'),  //r_help: "help(data,package='utils')",
             body: likelihoodRatiosPlotBetas.t('help.body')
         }
 ;

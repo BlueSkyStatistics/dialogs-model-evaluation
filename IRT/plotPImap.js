@@ -63,7 +63,7 @@ plotPImap({{selected.modelselector1 | safe}}, item.subset = "all", sorted = FALS
         
         this.help = {
             title: plotPImap.t('help.title'),
-            r_help: "help(data,package='utils')",
+            r_help: plotPImap.t('help.r_help'),  //r_help: "help(data,package='utils')",
             body: plotPImap.t('help.body')
         }
 ;
