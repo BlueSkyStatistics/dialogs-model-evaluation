@@ -1,11 +1,11 @@
 {
     "name": "@BlueSkyStatistics/dialogs/modelEvaluation",
-    "productName": "BlueSky Statistics Model Evaluation dialogs",
+    "productName": "BioStat Prime Model Evaluation dialogs",
     "description": " Model Evaluation dialogs",
     "keywords": [],
     "main": "nav.js",
     "version": "1.0.7",
-    "author": "BlueSky Statistics",
+    "author": "BioStat Prime",
 	"minBSkyVersion": "8.93",
     "scripts": {},
     "dependencies": {
