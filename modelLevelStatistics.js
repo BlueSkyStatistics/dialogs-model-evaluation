@@ -113,14 +113,14 @@ require(rsm)
 			BSkyFormat("Model Equation with Coefficients")
 			
 			#Display theoretical model
-			bsky_convert_lm_type %>%
-				equatiomatic::extract_eq(raw_tex = FALSE,
+			{{selected.modelselector1 | safe}} %>%
+				BlueSky::extract_eq_safe(raw_tex = FALSE,
 					wrap = TRUE, intercept = "alpha", ital_vars = FALSE) %>%
 					BSkyFormat()       
 
 			#Display coefficients
-			bsky_convert_lm_type %>%
-				equatiomatic::extract_eq(use_coefs = TRUE,
+			{{selected.modelselector1 | safe}} %>%
+				BlueSky::extract_eq_safe(use_coefs = TRUE,
 				wrap = TRUE,  ital_vars = FALSE, coef_digits = BSkyGetDecimalDigitSetting()) %>%
 				   BSkyFormat()
 		{{/if}}
