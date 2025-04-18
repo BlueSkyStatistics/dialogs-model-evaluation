@@ -23,65 +23,29 @@ class modelLevelStatistics extends baseModal {
             label: modelLevelStatistics.t('title'),
             modalType: "one",
             splitProcessing:false,
-            RCode:`
+            RCode: `
 require(broom)
 require(equatiomatic)
-require(rsm)
 
-	bsky_model_response_var = NULL
-	bsky_model_vars = NULL 
-	
-	bsky_model_response_var = all.vars(formula({{selected.modelselector1 | safe}}))[1]
-	bsky_model_vars = all.vars(formula({{selected.modelselector1 | safe}}))[-1]
-	cat("Selected model {{selected.modelselector1 | safe}} type: ", class({{selected.modelselector1 | safe}})[1], "\n")
-	cat("Selected model response variable name: ", bsky_model_response_var, "\n")
-	cat("Selected model variable name(s): ", paste(bsky_model_vars, collapse=','), "\n")
-	
-	#bsky_model_unique_terms <- unique(attr(terms({{selected.modelselector1 | safe}}), "term.labels"))
-	#bsky_clean_model_formula <- reformulate(bsky_model_unique_terms, response = all.vars(formula({{selected.modelselector1 | safe}}))[1])
 
-	BSkyFormat("Model formula")
-	#print(bsky_clean_model_formula)
-	print(({{selected.modelselector1 | safe}})$call)
 
-	if(any(c("lm", "rsm", "glm") %in% class({{selected.modelselector1 | safe}})) && !any(c("manova", "maov", "aov") %in% class({{selected.modelselector1 | safe}}))) 
+	if(any(c("lm","glm") %in% class({{selected.modelselector1 | safe}})[1]))
 	{
-		bsky_convert_lm_type = {{selected.modelselector1 | safe}}
-
-		if(class({{selected.modelselector1 | safe}})[1] == 'rsm'){
-			class(bsky_convert_lm_type) = "lm"
-		}
-			
 		{{if (options.selected.showModelEquationChk === "TRUE")}}
-		
-			BSkyFormat("Model Equation with Coefficients")
-			
 			#Display theoretical model
-			bsky_convert_lm_type %>%
+			{{selected.modelselector1 | safe}} %>%
 				equatiomatic::extract_eq(raw_tex = FALSE,
 					wrap = TRUE, intercept = "alpha", ital_vars = FALSE) %>%
 					BSkyFormat()       
 
 			#Display coefficients
-			bsky_convert_lm_type %>%
+			{{selected.modelselector1 | safe}} %>%
 				equatiomatic::extract_eq(use_coefs = TRUE,
 				wrap = TRUE,  ital_vars = FALSE, coef_digits = BSkyGetDecimalDigitSetting()) %>%
 				   BSkyFormat()
 		{{/if}}
-		
-		if(class(bsky_convert_lm_type)[1] == "lm"){
-			bsky_convert_lm_type %>% 
+		{{selected.modelselector1 | safe}} %>% 
 			  BSkyFormat(outputTableIndex = c(1),  perTableFooter = paste("Model Level Statistics for model {{selected.modelselector1 | safe}}"))
-		}else{
-			if(!any(c("manova", "maov") %in% class({{selected.modelselector1 | safe}}))){
-				BSkyFormat(as.data.frame({{selected.modelselector1 | safe}}%>% glance() ),singleTableOutputHeader = "Model Level Statistics for model {{selected.modelselector1 | safe}}" )
-			}else{
-				BSkyFormat("Model Summary")
-				summary({{selected.modelselector1 | safe}})
-			}
-		}
-	
-		rm(bsky_convert_lm_type)
 	} else {
 		if("train" %in% class({{selected.modelselector1 | safe}}) )
 		{
@@ -93,13 +57,7 @@ require(rsm)
 					cat(paste0("{{selected.modelselector1 | safe}}", " = ", paste(deparse({{selected.modelselector1 | safe}}\$call), collapse = "\n")), sep = "\n")
 				}
 			{{/if}}
-			
-			if(!any(c("manova", "maov") %in% class({{selected.modelselector1 | safe}}))){
-				BSkyFormat(as.data.frame({{selected.modelselector1 | safe}}%>% glance() ),singleTableOutputHeader = "Model Level Statistics for model {{selected.modelselector1 | safe}}" )
-			}else{
-				BSkyFormat("Model Summary")
-				summary({{selected.modelselector1 | safe}})
-			}
+			BSkyFormat(as.data.frame({{selected.modelselector1 | safe}}%>% glance() ),singleTableOutputHeader = "Model Level Statistics for model {{selected.modelselector1 | safe}}" )
 		} 
 	}
 				   
