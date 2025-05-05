@@ -62,7 +62,7 @@ plotPImap({{selected.modelselector1 | safe}}, item.subset = "all", sorted = FALS
             nav: {
                 name: plotPImap.t('navigation'),
                 icon: "icon-pi",
-                onclick: `r_before_modal("${config.id}")`
+                onclick: `r_before_modal('${config.id}')`
             }
         }
         super(config, objects, content);

@@ -53,7 +53,7 @@ class AIC extends baseModal {
             nav: {
                 name: AIC.t('navigation'),
                 icon: "icon-regression_stepaic",
-                onclick: `r_before_modal("${config.id}")`
+                onclick: `r_before_modal('${config.id}')`
             }
         }
         super(config, objects, content);

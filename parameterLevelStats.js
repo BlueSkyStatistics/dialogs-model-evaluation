@@ -58,7 +58,7 @@ BSkyFormat(as.data.frame({{selected.modelselector1 | safe}}%>% tidy() ),singleTa
             nav: {
                 name: parameterLevelStats.t('navigation'),
                 icon: "icon-parameter_statistics",
-                onclick: `r_before_modal("${config.id}")`
+                onclick: `r_before_modal('${config.id}')`
             }
         }
         super(config, objects, content);

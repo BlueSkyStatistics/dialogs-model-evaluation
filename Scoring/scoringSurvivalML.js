@@ -197,7 +197,7 @@ BSkyLoadRefresh("{{dataset.name}}")
             nav: {
                 name: scoringSurvivalML.t('navigation'),
                 icon: "icon-y-hat",
-                onclick: `r_before_modal("${config.id}")`,
+                onclick: `r_before_modal('${config.id}')`,
                 modal_id: config.id
             }
         }

@@ -54,7 +54,7 @@ print(summary({{selected.modelselector1 | safe}}))
             nav: {
                 name: summarizeAModel.t('navigation'),
                 icon: "icon-sigma-one",
-                onclick: `r_before_modal("${config.id}")`
+                onclick: `r_before_modal('${config.id}')`
             }
         }
         super(config, objects, content);
