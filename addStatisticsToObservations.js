@@ -181,7 +181,7 @@ BSkyLoadRefresh("{{dataset.name}}")
             nav: {
                 name: addStatisticsToObservations.t('navigation'),
                 icon: "icon-add_stats_to_obs",
-                onclick: `r_before_modal("${config.id}")`
+                onclick: `r_before_modal('${config.id}')`
             }
         }
         super(config, objects, content);

@@ -89,7 +89,7 @@ if ( "train" %in% class({{selected.modelselector1 | safe}}) )
             nav: {
                 name: hosmerLemeshow.t('navigation'),
                 icon: "icon-hl",
-                onclick: `r_before_modal("${config.id}")`
+                onclick: `r_before_modal('${config.id}')`
             }
         }
         super(config, objects, content);

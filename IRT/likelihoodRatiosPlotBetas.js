@@ -91,7 +91,7 @@ local({
             nav: {
                 name: likelihoodRatiosPlotBetas.t('navigation'),
                 icon: "icon-beta_p",
-                onclick: `r_before_modal("${config.id}")`
+                onclick: `r_before_modal('${config.id}')`
             }
         }
         super(config, objects, content);
