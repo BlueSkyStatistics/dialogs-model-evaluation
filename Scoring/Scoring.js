@@ -339,7 +339,7 @@ BSkyLoadRefresh("{{dataset.name}}")
             nav: {
                 name: localization.en.navigation,
                 icon: "icon-y-hat",
-                onclick: `r_before_modal("${config.id}")`,
+                onclick: `r_before_modal('${config.id}')`,
                 modal_id: config.id
             }
         }

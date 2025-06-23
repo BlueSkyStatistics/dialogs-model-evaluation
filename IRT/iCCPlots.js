@@ -312,7 +312,7 @@ if (classOfModel =="Rm" || classOfModel =="dRm")
             nav: {
                 name: localization.en.navigation,
                 icon: "icon-icc",
-                onclick: `r_before_modal("${config.id}")`
+                onclick: `r_before_modal('${config.id}')`
             }
         }
         super(config, objects, content);

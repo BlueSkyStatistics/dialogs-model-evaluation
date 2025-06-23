@@ -243,7 +243,7 @@ BSkyFormat(as.data.frame(lrtestResults), singleTableOutputHeader = "Likelihood R
             nav: {
                 name: localization.en.navigation,
                 icon: "icon-anova_lrt",
-                onclick: `r_before_modal("${config.id}")`
+                onclick: `r_before_modal('${config.id}')`
             }
         }
         super(config, objects, content);

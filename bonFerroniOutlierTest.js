@@ -121,7 +121,7 @@ print( car::outlierTest({{selected.modelselector1 | safe}}))
             nav: {
                 name: localization.en.navigation,
                 icon: "icon-outlier",
-                onclick: `r_before_modal("${config.id}")`
+                onclick: `r_before_modal('${config.id}')`
             }
         }
         super(config, objects, content);

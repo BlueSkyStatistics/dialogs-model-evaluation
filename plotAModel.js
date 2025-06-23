@@ -81,7 +81,7 @@ class plotAModel extends baseModal {
             nav: {
                 name: localization.en.navigation,
                 icon: "icon-gaussian-function",
-                onclick: `r_before_modal("${config.id}")`
+                onclick: `r_before_modal('${config.id}')`
             }
         }
         super(config, objects, content);
