@@ -4,7 +4,7 @@
     "description": " Model Evaluation dialogs",
     "keywords": [],
     "main": "nav.js",
-    "version": "1.0.7",
+    "version": "1.0.8",
     "author": "BioStat Prime",
 	"minBSkyVersion": "8.93",
     "scripts": {},
