@@ -91,7 +91,7 @@ if ("coxph" %in% class({{selected.modelselector1 | safe}}))
 }
 `,
             pre_start_r: JSON.stringify({
-                modelselector1: "BSkyGetAvailableModels(c(\"lm\", \"glm\", \"multinom\",\"nnet\",\"polr\"), returnClassTrain = FALSE)",
+                modelselector1: "BSkyGetAvailableModels(c(\"lm\", \"glm\", \"multinom\",\"nnet\",\"polr\",\"coxph\"), returnClassTrain = FALSE)",
             })
         }
         var objects = {
