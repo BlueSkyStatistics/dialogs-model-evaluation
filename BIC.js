@@ -53,7 +53,7 @@ class BIC extends baseModal {
             nav: {
                 name: BIC.t('navigation'),
                 icon: "icon-ruler",
-                onclick: `r_before_modal("${config.id}")`
+                onclick: `r_before_modal('${config.id}')`
             }
         }
         super(config, objects, content);

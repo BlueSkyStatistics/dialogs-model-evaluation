@@ -52,7 +52,7 @@ BSkyFormat(pscl::pR2({{selected.modelselector1 | safe}}), singleTableOutputHeade
             nav: {
                 name: pseudoRSquared.t('navigation'),
                 icon: "icon-r_squared",
-                onclick: `r_before_modal("${config.id}")`
+                onclick: `r_before_modal('${config.id}')`
             }
         }
         super(config, objects, content);

@@ -60,7 +60,7 @@ local({
             nav: {
                 name: itemFit.t('navigation'),
                 icon: "icon-item_fit",
-                onclick: `r_before_modal("${config.id}")`
+                onclick: `r_before_modal('${config.id}')`
             }
         }
         super(config, objects, content);

@@ -56,7 +56,7 @@ BSkyFormat(hout)
             nav: {
                 name: summarizeNModels.t('navigation'),
                 icon: "icon-sigma-n",
-                onclick: `r_before_modal("${config.id}")`
+                onclick: `r_before_modal('${config.id}')`
             }
         }
         super(config, objects, content);

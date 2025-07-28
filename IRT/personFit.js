@@ -97,7 +97,7 @@ local({
             nav: {
                 name: personFit.t('navigation'),
                 icon: "icon-person",
-                onclick: `r_before_modal("${config.id}")`
+                onclick: `r_before_modal('${config.id}')`
             }
         }
         super(config, objects, content);

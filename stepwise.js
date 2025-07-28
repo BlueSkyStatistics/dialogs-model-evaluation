@@ -93,7 +93,7 @@ if ("coxph" %in% class({{selected.modelselector1 | safe}}))
             nav: {
                 name: stepwise.t('navigation'),
                 icon: "icon-regression_stepaic",
-                onclick: `r_before_modal("${config.id}")`
+                onclick: `r_before_modal('${config.id}')`
             }
         }
         super(config, objects, content);

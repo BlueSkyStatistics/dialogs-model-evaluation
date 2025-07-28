@@ -62,7 +62,7 @@ BSkyFormat(obj, singleTableOutputHeader="Variance-inflation factors")
             nav: {
                 name: varianceInflationFactors.t('navigation'),
                 icon: "icon-variance_inflation",
-                onclick: `r_before_modal("${config.id}")`
+                onclick: `r_before_modal('${config.id}')`
             }
         }
         super(config, objects, content);

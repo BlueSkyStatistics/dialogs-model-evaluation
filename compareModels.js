@@ -108,7 +108,7 @@ BSkyFormat(as.data.frame(lrtestResults), singleTableOutputHeader = "Likelihood R
             nav: {
                 name: compareModels.t('navigation'),
                 icon: "icon-compare",
-                onclick: `r_before_modal("${config.id}")`
+                onclick: `r_before_modal('${config.id}')`
             }
         }
         super(config, objects, content);
