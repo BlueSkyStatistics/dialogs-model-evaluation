@@ -56,6 +56,13 @@ const nav = () => ({
                 "./Scoring/scoringSurvivalCL",
             ]
         },
+        {
+            "name": t('modelevaluation_ResponseOptimizer'),// {ns: 'menutoolbar'}),
+            "icon": "icon-y-hat",
+            "children": [
+
+            ]
+        },
         "./stepwise",
         {
             "name": t('modelevaluation_Summarize'),// {ns: 'menutoolbar'}),
