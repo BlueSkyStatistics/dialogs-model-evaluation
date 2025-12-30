@@ -26,6 +26,7 @@ class modelLevelStatistics extends baseModal {
             RCode:`
 require(broom)
 require(equatiomatic)
+require(textutils)
 require(rsm)
 
 	bsky_model_response_var = NULL
