@@ -25,8 +25,8 @@ class modelLevelStatistics extends baseModal {
             splitProcessing:false,
             RCode:`
 require(broom)
-require(equatiomatic)
 require(textutils)
+require(equatiomatic)
 require(rsm)
 
 	bsky_model_response_var = NULL
@@ -71,8 +71,42 @@ require(rsm)
 		{{/if}}
 		
 		if(class(bsky_convert_lm_type)[1] == "lm"){
-			bsky_convert_lm_type %>% 
-			  BSkyFormat(outputTableIndex = c(1),  perTableFooter = paste("Model Level Statistics for model {{selected.modelselector1 | safe}}"))
+			#bsky_convert_lm_type %>% 
+			#  BSkyFormat(outputTableIndex = c(1),  perTableFooter = paste("Model Level Statistics for model {{selected.modelselector1 | safe}}"))
+			
+			bsky_convert_lm_type_summary = summary(bsky_convert_lm_type)	  
+			bsky_lm_fstat <-  bsky_convert_lm_type_summary$fstatistic
+			suppressWarnings((bsky_lm_model_pval = pf(bsky_lm_fstat["value"],
+								bsky_lm_fstat["numdf"],
+								bsky_lm_fstat["dendf"],
+								lower.tail = FALSE)))
+				  
+			#suppressWarnings((bsky_lm_model_pval = pf(bsky_convert_lm_type_summary$fstatistic[1], bsky_convert_lm_type_summary$fstatistic[2], bsky_convert_lm_type_summary$fstatistic[3], lower.tail=F)))
+										
+			if(!is.nan(bsky_lm_model_pval) && signif(bsky_lm_model_pval,2) <= 2.2e-16)
+			{
+			  if(engNotationSetting == TRUE)
+			  {
+				bsky_pval_str = "p-value < 2.2e-16"
+			  }
+			  else
+			  {
+				bsky_pval_str = "0"
+			  }
+			}else{
+				bsky_pval_str = paste(bsky_lm_model_pval)
+			}
+			 
+			bsky_lm_summary_table = data.frame(bsky_convert_lm_type_summary$sigma,
+												bsky_convert_lm_type_summary$df[2],
+												bsky_convert_lm_type_summary$r.squared,
+												bsky_convert_lm_type_summary$adj.r.squared,
+												bsky_convert_lm_type_summary$fstatistic[1],
+												bsky_convert_lm_type_summary$fstatistic[2],
+												bsky_convert_lm_type_summary$fstatistic[3],
+												bsky_pval_str)
+			names(bsky_lm_summary_table) = c("Residual Std. Error", "df", "R-squared", "Adjusted R-squared", "F-statistics", "numdf", "dendf", "p-value")
+			BSkyFormat(bsky_lm_summary_table, outputTableRenames = "LM Summary")
 		}else{
 			if(!any(c("manova", "maov") %in% class({{selected.modelselector1 | safe}}))){
 				BSkyFormat(as.data.frame({{selected.modelselector1 | safe}}%>% glance() ),singleTableOutputHeader = "Model Level Statistics for model {{selected.modelselector1 | safe}}" )
