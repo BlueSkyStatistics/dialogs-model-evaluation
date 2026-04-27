@@ -90,10 +90,6 @@ For detailed help click on the R icon on the top right hand side of this dialog 
 
 
 
-
-
-
-
 class addStatisticsToObservations extends baseModal {
     constructor() {
         var config = {
@@ -104,33 +100,104 @@ class addStatisticsToObservations extends baseModal {
             RCode: `
 require(broom)
 require(dplyr)
-local({
-results <-ModelMatchesDataset('{{selected.modelselector1 | safe}}', '{{dataset.name}}', NAinVarsCheck=FALSE ) 
-if ( results$success ==TRUE)
-{
-    if ( "train" %in% class({{selected.modelselector1 | safe}}) )
-    {
-    model ={{selected.modelselector1 | safe}}$finalModel
-    }
-    else
-    {
-    model ={{selected.modelselector1 | safe}}
-    }
-    #Robust linear regression returns a model of class lm and rlm
-    if ( ("lm" %in% class(model)  || "glm" %in% class(model)) && !"rlm" %in% class(model)   )
-    {
-    {{dataset.name}}<<-dplyr::bind_cols( {{dataset.name}}, round (broom::augment(model, data = {{dataset.name}}, se_fit =  {{if (options.selected.chk5 ==".se.fit,")}}TRUE{{#else}}FALSE{{/if}}) %>% dplyr::select ({{selected.chk1 | safe}}{{selected.chk2 | safe}}{{selected.chk3 | safe}}{{selected.chk4 | safe}}{{selected.chk5 | safe}}{{selected.chk6 | safe}}{{selected.chk7 | safe}}),BSkyGetDecimalDigitSetting())  %>% setNames(paste0(names(.), '_{{selected.suff | safe}}' ) ) ) 
-    }
-    else if ( "rq" %in% class(model) )
-    {
-    {{dataset.name}}<<-dplyr::bind_cols( {{dataset.name}}, round( broom::augment(model, data = {{dataset.name}}) %>% dplyr::select ({{selected.chk4 | safe}}{{selected.chk6 | safe}}{{selected.chk8 | safe}}),BSkyGetDecimalDigitSetting() ) %>% setNames(paste0(names(.), '_{{selected.suff | safe}}') ) ) 
-    }
-    else
-    {
-    {{dataset.name}}<<-dplyr:: bind_cols( {{dataset.name}}, round(broom::augment(model, data = {{dataset.name}}) %>% dplyr::select ({{selected.chk4 | safe}}{{selected.chk5 | safe}}{{selected.chk6 | safe}}), BSkyGetDecimalDigitSetting()) %>% setNames(paste0(names(.), '_{{selected.suff | safe}}' ) ) ) 
-    }
-}
-})
+
+		BSkyAugmentModel <- function(model, full_data, stats_digits = BSkyGetDecimalDigitSetting(),
+                              suffix = "_aaa", se_fit = TRUE,
+                              keep_stats = c(".fitted", ".resid", ".se.fit",
+                                             ".sigma", ".hat", ".cooksd", ".std.resid")) {
+
+				keep_stats <- trimws(keep_stats)              # strip leading/trailing spaces
+				keep_stats <- keep_stats[nchar(keep_stats) > 0]  # drop empty elements
+  
+			  # --- Steps 1-4 unchanged: extract vars, tag rows, clean, augment ---
+			  model_vars <- tryCatch({
+				all.vars(formula(model))
+			  }, error = function(e) all.vars(as.formula(model$call$formula)))
+
+			  valid_vars <- model_vars[model_vars %in% names(full_data)]
+
+			  full_data$.original_row_id <- seq_len(nrow(full_data))
+
+			  has_na     <- !all(complete.cases(full_data[, valid_vars]))
+			  clean_data <- if (has_na) {
+				full_data[complete.cases(full_data[, valid_vars]), ]
+			  } else {
+				full_data
+			  }
+
+			  bsky_augmented <- tryCatch({
+				broom::augment(model, data = clean_data, se_fit = se_fit) %>%
+				  dplyr::select(dplyr::any_of(c(
+					".original_row_id",
+					".fitted", ".resid", ".se.fit",
+					".sigma", ".hat", ".cooksd", ".std.resid"
+				  ))) %>%
+				  # --- KEY: only keep stats the user requested ---
+				  dplyr::select(".original_row_id",
+								dplyr::any_of(keep_stats)) %>%
+				  dplyr::mutate(across(-".original_row_id",
+								~ round(.x, stats_digits)))
+			  }, error = function(e) {
+				warning("BSkyAugmentModel: augment failed — ", conditionMessage(e))
+				return(NULL)
+			  })
+
+			  if (is.null(bsky_augmented)) {
+				full_data$.original_row_id <- NULL
+				return(full_data)
+			  }
+
+			  # --- Rename with suffix then join ---
+			  stat_cols <- setdiff(names(bsky_augmented), ".original_row_id")
+			  names(bsky_augmented)[names(bsky_augmented) %in% stat_cols] <-
+				paste0(stat_cols, suffix)
+
+			  bsky_result <- full_data %>%
+				dplyr::left_join(bsky_augmented, by = ".original_row_id") %>%
+				dplyr::select(-.original_row_id)
+
+			  return(bsky_result)
+		}
+			
+			
+	local({
+	results <-ModelMatchesDataset('{{selected.modelselector1 | safe}}', '{{dataset.name}}', NAinVarsCheck=FALSE ) 
+	if ( results$success ==TRUE)
+	{
+		if ( "train" %in% class({{selected.modelselector1 | safe}}) )
+		{
+		model ={{selected.modelselector1 | safe}}$finalModel
+		}
+		else
+		{
+		model ={{selected.modelselector1 | safe}}
+		}
+		
+		#Robust linear regression returns a model of class lm and rlm
+		if ( ("lm" %in% class(model)  || "glm" %in% class(model)) && !"rlm" %in% class(model)   )
+		{
+		#{{dataset.name}}<<-dplyr::bind_cols( {{dataset.name}}, round (broom::augment(model, data = {{dataset.name}}, se_fit =  {{if (options.selected.chk5 ==".se.fit,")}}TRUE{{#else}}FALSE{{/if}}) %>% dplyr::select ({{selected.chk1 | safe}}{{selected.chk2 | safe}}{{selected.chk3 | safe}}{{selected.chk4 | safe}}{{selected.chk5 | safe}}{{selected.chk6 | safe}}{{selected.chk7 | safe}}),BSkyGetDecimalDigitSetting())  %>% setNames(paste0(names(.), '_{{selected.suff | safe}}' ) ) ) 
+		
+		{{dataset.name}} <<- BSkyAugmentModel(
+												  model       = model,
+												  full_data   = {{dataset.name}},
+												  stats_digits = BSkyGetDecimalDigitSetting(),
+												  suffix      = '_{{selected.suff | safe}}',
+												  se_fit      = TRUE,                          # always compute all stats
+												  keep_stats  = strsplit(c("{{selected.chk1 | safe}}{{selected.chk2 | safe}}{{selected.chk3 | safe}}{{selected.chk4 | safe}}{{selected.chk5 | safe}}{{selected.chk6 | safe}}{{selected.chk7 | safe}}"), ",")[[1]]
+												)
+		
+		}
+		else if ( "rq" %in% class(model) )
+		{
+		{{dataset.name}}<<-dplyr::bind_cols( {{dataset.name}}, round( broom::augment(model, data = {{dataset.name}}) %>% dplyr::select ({{selected.chk4 | safe}}{{selected.chk6 | safe}}{{selected.chk8 | safe}}),BSkyGetDecimalDigitSetting() ) %>% setNames(paste0(names(.), '_{{selected.suff | safe}}') ) ) 
+		}
+		else
+		{
+		{{dataset.name}}<<-dplyr:: bind_cols( {{dataset.name}}, round(broom::augment(model, data = {{dataset.name}}) %>% dplyr::select ({{selected.chk4 | safe}}{{selected.chk5 | safe}}{{selected.chk6 | safe}}), BSkyGetDecimalDigitSetting()) %>% setNames(paste0(names(.), '_{{selected.suff | safe}}' ) ) ) 
+		}
+	}
+	})
 BSkyLoadRefresh("{{dataset.name}}")
             `,
             pre_start_r: JSON.stringify({
