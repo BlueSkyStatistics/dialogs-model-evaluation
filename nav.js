@@ -75,7 +75,8 @@ const nav = () => ({
             ]
         },
         "./varianceInflationFactors",
-		"./deleteNModels"
+		"./deleteNModels",
+		"./convertNModelsRSMtoLM"
     ]
 })
 
