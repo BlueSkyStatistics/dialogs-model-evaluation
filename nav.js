@@ -1,19 +1,10 @@
-/**
-  * This file is protected by copyright (c) 2023-2025 by BlueSky Statistics, LLC.
-  * All rights reserved. The copy, modification, or distribution of this file is not
-  * allowed without the prior written permission from BlueSky Statistics, LLC.
- */
-
-const {getT} = global.requireFromRoot("localization");
-let t = getT('menutoolbar')
-const nav = () => ({
-    "name": t('modelevaluation_top_level_title'),// {ns: 'menutoolbar'}),
-    "tab": "model_statistics",
+const nav = {
+    "id": "menu-modelevaluation",
     "buttons": [
         "./addStatisticsToObservations",
         "./anovaLikelihoodRatio",
         {
-            "name": t('modelevaluation_Compare'),// {ns: 'menutoolbar'}),
+            "id": "menu-modelevaluation-compare",
             "icon": "icon-compare",
             "children": [
                 "./compareModels",
@@ -24,7 +15,7 @@ const nav = () => ({
         },
         "./confidenceInterval",
         {
-            "name": t('modelevaluation_Fit'),// {ns: 'menutoolbar'}),
+            "id": "menu-modelevaluation-fit",
             "icon": "icon-ruler",
             "children": [
                 "./AIC",
@@ -34,7 +25,7 @@ const nav = () => ({
             ]
         },
         {
-            "name": t('modelevaluation_IRT'),// {ns: 'menutoolbar'}),
+            "id": "menu-modelevaluation-irt",
             "icon": "icon-lamp",
             "children": [
                 "./IRT/iCCPlots",
@@ -49,7 +40,7 @@ const nav = () => ({
         "./bonFerroniOutlierTest",
         "./plotAModel",
         {
-            "name": t('modelevaluation_Predict'),// {ns: 'menutoolbar'}),
+            "id": "menu-modelevaluation-predict",
             "icon": "icon-y-hat",
             "children": [
                 "./Scoring/Scoring",
@@ -57,7 +48,7 @@ const nav = () => ({
             ]
         },
         {
-            "name": t('modelevaluation_ResponseOptimizer'),// {ns: 'menutoolbar'}),
+            "id": "menu-modelevaluation-response-optimizer",
             "icon": "icon-y-hat",
             "children": [
 
@@ -65,7 +56,7 @@ const nav = () => ({
         },
         "./stepwise",
         {
-            "name": t('modelevaluation_Summarize'),// {ns: 'menutoolbar'}),
+            "id": "menu-modelevaluation-summarize",
             "icon": "icon-sigma",
             "children": [
                 "./modelLevelStatistics",
@@ -78,9 +69,6 @@ const nav = () => ({
 		"./deleteNModels",
 		"./convertNModelsRSMtoLM"
     ]
-})
-
-module.exports = {
-    nav: nav(),
-    render: () => nav()
 }
+
+module.exports.nav = nav
