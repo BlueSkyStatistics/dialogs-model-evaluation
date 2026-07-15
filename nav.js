@@ -55,7 +55,7 @@ const nav = {
             ]
         },
 		{
-			"name": "ROC Curves?",
+			"id": "menu-modelevaluation-ROC-Curves",
 			"icon": "icon-icc",
 			"children": [
 
