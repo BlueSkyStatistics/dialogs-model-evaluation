@@ -64,7 +64,7 @@ const nav = () => ({
             ]
         },
 		{
-			"name": "ROC Curves?",
+			"name": t('menu-modelevaluation-ROC-Curves'),
 			"icon": "icon-icc",
 			"children": [
 
