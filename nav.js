@@ -23,6 +23,7 @@ const nav = () => ({
             ]
         },
         "./confidenceInterval",
+		"./EmmeansPredictionPlot",
         {
             "name": t('modelevaluation_Fit'),// {ns: 'menutoolbar'}),
             "icon": "icon-ruler",
