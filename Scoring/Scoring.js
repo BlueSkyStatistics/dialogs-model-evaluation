@@ -40,6 +40,25 @@ var localization = {
     See details on the predict function and confusion matrix below
     <br/>
     <br/>
+    <b>Zero-Inflated / Hurdle models (class "zeroinfl"/"hurdle", package pscl)</b></br>
+    These models have two linear predictors and are scored differently from other model classes: instead of a single predicted value, three columns are added with the specified prefix:</br>
+    <ul>
+    <li>
+    <code>{prefix}_ExpectedCount</code>: the overall expected count E[Y|X], blending both parts of the model. Comparable to a plain Poisson/Negative Binomial prediction.
+    </li>
+    <li>
+    <code>{prefix}_StructuralZeroProb</code> (Zero-Inflated models only): the probability this row is a "structural zero" - genuinely not at risk this period.
+    </li>
+    <li>
+    <code>{prefix}_ProbNoEvent</code> (Hurdle models only): the probability of zero events at all, P(Y=0) - the hurdle-crossing probability.
+    </li>
+    <li>
+    <code>{prefix}_ExpectedCountIfAtRisk</code>: the expected count given the row is at risk / the hurdle is crossed - useful for severity estimation once an event is known or assumed to occur.
+    </li>
+    </ul>
+    Confidence/prediction intervals, ROC curves, ROC tables, and the confusion matrix are not applicable to these model classes and are skipped automatically.
+    <br/>
+    <br/>
     <b>Description</b></br>
     predict is a generic function for making predictions using the selected model. 
     <br/>
@@ -109,6 +128,98 @@ class Scoring extends baseModal {
             modalType: "one",
             RCode: `
 local(
+{
+#Zero-Inflated/Hurdle models (package pscl, class "zeroinfl"/"hurdle") have two linear predictors and
+#were not built into BSkyPredict() (which targets single-formula models), nor into predictPrerequisiteCP()
+#(the pre-check run when a model is selected). Rather than depend on either hidden function, this path is
+#fully self-contained: class detection, predictor-variable handling, and prediction are all done here with
+#base R + tryCatch, and execution is never gated on predictPrerequisiteCP()'s result for these two classes
+#(see prepareExecution() in this dialog's JS and the modelSelection onselect_r hook).
+BSky_Model_Obj = tryCatch(get('{{selected.modelSelection | safe}}'), error = function(e) NULL)
+if (is.null(BSky_Model_Obj))
+{
+cat("ERROR: The model '{{selected.modelSelection | safe}}' could not be found. Please rebuild or reselect the model.\\n")
+}
+else if (inherits(BSky_Model_Obj, "zeroinfl") || inherits(BSky_Model_Obj, "hurdle"))
+{
+tryCatch(
+{
+BSky_ZI_NewData = get('{{dataset.name}}')
+BSky_ZI_Prefix = '{{selected.colname | safe}}'
+
+#Overall expected count E[Y|X] - the single best point estimate, blending both parts of the model.
+#Comparable to what a plain Poisson/Negative Binomial model's prediction gives you.
+BSky_ZI_ExpCount = predict(BSky_Model_Obj, newdata = BSky_ZI_NewData, type = "response")
+eval(parse(text = paste("{{dataset.name}}", "$", BSky_ZI_Prefix, "_ExpectedCount", "<<-", "BSky_ZI_ExpCount", sep = "")))
+
+if (inherits(BSky_Model_Obj, "zeroinfl"))
+{
+#Probability this row is a "structural zero" - genuinely not at risk this period (Zero-Inflated models only).
+BSky_ZI_ZeroProb = predict(BSky_Model_Obj, newdata = BSky_ZI_NewData, type = "zero")
+eval(parse(text = paste("{{dataset.name}}", "$", BSky_ZI_Prefix, "_StructuralZeroProb", "<<-", "BSky_ZI_ZeroProb", sep = "")))
+}
+else
+{
+#Probability of zero events at all (P(Y=0)) - the hurdle-crossing probability (Hurdle models only).
+BSky_ZI_ZeroProb = predict(BSky_Model_Obj, newdata = BSky_ZI_NewData, type = "prob")[, 1]
+eval(parse(text = paste("{{dataset.name}}", "$", BSky_ZI_Prefix, "_ProbNoEvent", "<<-", "BSky_ZI_ZeroProb", sep = "")))
+}
+
+#Expected count given the row is at risk / the hurdle is crossed - useful for severity estimation
+#once you already know (or assume) an event occurs.
+#IMPORTANT: for Hurdle models, predict(..., type="count") returns the RAW (untruncated) rate
+#parameter feeding the count part, not the true conditional mean E[Y | Y>0] - because the count part
+#of a Hurdle model is zero-truncated by construction (it can never itself produce a zero; zero is
+#handled entirely by the hurdle part). The true E[Y|Y>0] is always somewhat higher than the raw rate.
+#For Zero-Inflated models no such adjustment applies: the count part is a normal, non-truncated
+#Poisson/Negative Binomial that is allowed to produce zeros naturally, so the raw predicted value
+#already is the correct "expected count if this row is not a structural zero".
+BSky_ZI_CondCount = predict(BSky_Model_Obj, newdata = BSky_ZI_NewData, type = "count")
+if (inherits(BSky_Model_Obj, "hurdle"))
+{
+#Wrapped in its own tryCatch: if $dist/$theta are not the single scalar values assumed here (e.g. a
+#future pscl version stores hurdle's count/zero distributions differently), this falls back to the
+#unadjusted rate with a note, rather than failing the whole scoring run.
+BSky_ZI_CondCount = tryCatch(
+{
+#[1] defensively forces a single scalar even if $dist/$theta were ever length > 1 for this class.
+BSky_ZI_Dist = BSky_Model_Obj\$dist[1]
+if (identical(BSky_ZI_Dist, "negbin"))
+{
+BSky_ZI_Theta = BSky_Model_Obj\$theta[1]
+BSky_ZI_P0 = stats::dnbinom(0, size = BSky_ZI_Theta, mu = BSky_ZI_CondCount)
+}
+else
+{
+BSky_ZI_P0 = stats::dpois(0, BSky_ZI_CondCount)
+}
+#General relationship: for any distribution, E[Y] = E[Y|Y>0]*P(Y>0), so E[Y|Y>0] = mu / (1 - P(Y=0)),
+#where mu here is the untruncated rate parameter and P(Y=0) is computed from that same untruncated
+#distribution (never observed directly, since Hurdle's count part is fit only on the positive values).
+BSky_ZI_CondCount / (1 - BSky_ZI_P0)
+}, error = function(e)
+{
+cat("Note: Could not apply the zero-truncation adjustment to the at-risk expected count (", conditionMessage(e), "). Reporting the unadjusted rate instead.\\n", sep = "")
+BSky_ZI_CondCount
+})
+}
+eval(parse(text = paste("{{dataset.name}}", "$", BSky_ZI_Prefix, "_ExpectedCountIfAtRisk", "<<-", "BSky_ZI_CondCount", sep = "")))
+
+cat("Scoring complete. Columns added with prefix '", BSky_ZI_Prefix, "':\\n", sep = "")
+cat(" - ", BSky_ZI_Prefix, "_ExpectedCount : overall expected count E[Y|X]\\n", sep = "")
+if (inherits(BSky_Model_Obj, "zeroinfl"))
+{
+cat(" - ", BSky_ZI_Prefix, "_StructuralZeroProb : probability this row is a structural zero (not at risk this period)\\n", sep = "")
+}
+else
+{
+cat(" - ", BSky_ZI_Prefix, "_ProbNoEvent : probability of zero events (P(Y=0))\\n", sep = "")
+}
+cat(" - ", BSky_ZI_Prefix, "_ExpectedCountIfAtRisk : expected count given the row is at risk / the hurdle is crossed", if (inherits(BSky_Model_Obj, "hurdle")) " (already adjusted for zero-truncation)" else "", "\\n", sep = "")
+cat("\\nNote: Confidence/prediction intervals, ROC curves, ROC tables, and the confusion matrix do not apply to Zero-Inflated/Hurdle count models and were skipped.\\n")
+}, error = function(e) { cat("ERROR scoring with this Zero-Inflated/Hurdle model:", conditionMessage(e), "\\n") })
+}
+else
 {
 #Run predict
 BSkyPredictions <- BSkyPredict(modelname='{{selected.modelSelection | safe}}', prefix='{{selected.colname | safe}}', confinterval ={{selected.conflevel | safe}}, level ={{selected.level | safe}}, datasetname='{{dataset.name}}')
@@ -188,13 +299,15 @@ if (ROC && ({{selected.roctable | safe}} || {{selected.rocCurves | safe}}) || {{
     if( exists("BSkytemp")) rm(BSkytemp)
 }
 }
+}
 )
 #Refresh dataset
 BSkyLoadRefresh("{{dataset.name}}")
 {{if (options.selected.saveRoctableToDataset == "TRUE")}} BSkyLoadRefresh("{{selected.datasetNameForROC | safe}}"){{/if}}
 `,
             pre_start_r: JSON.stringify({
-                modelSelection: "BSkyGetAvailableModels(objclasslist ='All_Models', suppress = \"coxph\")",
+                //modelSelection: "BSkyGetAvailableModels(objclasslist ='All_Models', suppress = \"coxph\")",
+				modelSelection: "BSkyGetAvailableModels(c(\"lm\", \"glm\", \"gls\", \"lme\",\"loglm\", \"negbin\", \"nls\",\"survreg\",\"lmerModLmerTest\", \"polr\",\"multinom\",\"loess\",\"zeroinfl\",\"hurdle\"), returnClassTrain=FALSE)",
             })
         }
         var objects = {
@@ -204,7 +317,7 @@ BSkyLoadRefresh("{{dataset.name}}")
                     label: localization.en.filterModels,
                     multiple: false,
                     extraction: "NoPrefix|UseComma",
-                    options: ["adaboost", "All_Models", "BinaryTree", "blasso", "C5.0", "drc", "earth", "gbm", "glm", "glmnet", "knn3", "ksvm", "lm", "lmerModLmerTest", "lognet", "mlp", "multinom", "NaiveBayes", "nls", "nn", "nnet", "polr", "randomForest", "RandomForest", "ranger", "real_adaboost", "rlm", "rpart", "rq", "rsnns", "train", "xgb.Booster"],
+                    options: ["adaboost", "All_Models", "BinaryTree", "blasso", "C5.0", "drc", "earth", "gbm", "glm", "glmnet", "hurdle", "knn3", "ksvm", "lm", "lmerModLmerTest", "lognet", "mlp", "multinom", "NaiveBayes", "nls", "nn", "nnet", "polr", "randomForest", "RandomForest", "ranger", "real_adaboost", "rlm", "rpart", "rq", "rsnns", "train", "xgb.Booster", "zeroinfl"],
                     default: "All_Models",
                     onselect_r: { modelSelection: "BSkyGetAvailableModels( objclasslist = c('{{value}}'))" }
                 })
@@ -218,7 +331,7 @@ BSkyLoadRefresh("{{dataset.name}}")
                     options: [],
                     default: "",
                     required: true,
-                    onselect_r: { label12: "predictPrerequisiteCP('{{value}}', '{{dataset.name}}')" , levelOfInterest: "bivariateLevels(datasetName=c('{{dataset.name}}'),dependentVariable=getModelDependentVariable('{{value}}'))" }
+                    onselect_r: { label12: "local({m=tryCatch(get('{{value}}'),error=function(e) NULL); if(!is.null(m) && (inherits(m,'zeroinfl')||inherits(m,'hurdle'))){nv=tryCatch(all.vars(formula(m))[-1],error=function(e) character(0));ds=tryCatch(get('{{dataset.name}}'),error=function(e) NULL);if(is.null(ds)){\"ZI_INFO: Dataset '{{dataset.name}}' could not be found yet - this will be re-checked when you click Run.\"}else{mv=setdiff(nv,names(ds));if(length(mv)==0){\"ZI_INFO: All required predictor variables appear to be available in the dataset. Click Run to score.\"}else{paste(\"ZI_INFO: The following predictor variable(s) required by the model do not appear to be in the dataset:\",paste(mv,collapse=', '),\"- this will be re-checked when you click Run.\")}}}else{predictPrerequisiteCP('{{value}}', '{{dataset.name}}')}})" , levelOfInterest: "bivariateLevels(datasetName=c('{{dataset.name}}'),dependentVariable=getModelDependentVariable('{{value}}'))" }
                 })
             },
             label12: { el: new preVar(config, { no: "label12", label: localization.en.label12, h: 6 }) },
@@ -366,7 +479,17 @@ BSkyLoadRefresh("{{dataset.name}}")
                 datasetNameForROC: instance.objects.datasetNameForROC.el.getVal(),
             }
         }
-        if (code_vars.selected.label12.substr(0, 7) != "SUCCESS") {
+        //Zero-Inflated/Hurdle models (label12 starts with "ZI_" - see the modelSelection onselect_r hook)
+        //use a fully self-contained R path within the RCode itself (class detection, predictor-variable
+        //validation, and prediction all handled there via base R + tryCatch). This dialog does not gate
+        //execution on label12 for these two classes - label12 is shown to the user as an informative
+        //pre-check only. No dependency on predictPrerequisiteCP() or BSkyPredict() for this path.
+        if (code_vars.selected.label12.substr(0, 3) === "ZI_") {
+            let cmd = instance.dialog.renderR(code_vars)
+            cmd = removenewline(cmd);
+            res.push({ cmd: cmd, cgid: newCommandGroup(`${instance.config.id}`, `${instance.config.label}`), oriR: instance.config.RCode, code_vars: code_vars })
+        }
+        else if (code_vars.selected.label12.substr(0, 7) != "SUCCESS") {
             let cmd = "cat(\"ERROR: The predictor variables that the model requires for scoring are not available in the dataset.\n Please review the diagnostic message on the dialog.\")";
             res.push({ cmd: cmd, cgid: newCommandGroup(`${instance.config.id}`, `${instance.config.label}`), oriR: instance.config.RCode, code_vars: code_vars })
         }

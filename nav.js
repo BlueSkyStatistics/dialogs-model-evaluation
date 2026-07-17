@@ -21,6 +21,7 @@ const nav = {
             ]
         },
         "./confidenceInterval",
+		"./EmmeansPredictionPlot",
         {
             "name": "Fit",
             "icon": "icon-ruler",
