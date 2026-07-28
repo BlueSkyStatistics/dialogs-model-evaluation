@@ -14,6 +14,7 @@ const nav = {
             ]
         },
         "./confidenceInterval",
+		"./EmmeansPredictionPlot",
         {
             "id": "menu-modelevaluation-fit",
             "icon": "icon-ruler",
