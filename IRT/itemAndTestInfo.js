@@ -80,7 +80,8 @@ plotINFO({{selected.modelselector1 | safe}}, theta = seq(-4, 4,length.out = 1001
             nav: {
                 name: localization.en.navigation,
                 icon: "icon-temperatire",
-                onclick: `r_before_modal('${config.id}')`
+                onclick: `r_before_modal('${config.id}')`,
+                datasetRequired: false
             }
         }
         super(config, objects, content);

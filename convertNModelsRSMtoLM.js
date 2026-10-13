@@ -605,7 +605,8 @@ for (i in seq_along(bsky_selected_models)) {
             nav: {
                 name: localization.en.navigation,
                 icon: "icon-sigma-n",
-                onclick: `r_before_modal('${config.id}')`
+                onclick: `r_before_modal('${config.id}')`,
+                datasetRequired: false
             }
         }
         super(config, objects, content);

@@ -104,7 +104,8 @@ BSkyFormat(pscl::pR2({{selected.modelselector1 | safe}}), singleTableOutputHeade
             nav: {
                 name: localization.en.navigation,
                 icon: "icon-r_squared",
-                onclick: `r_before_modal('${config.id}')`
+                onclick: `r_before_modal('${config.id}')`,
+                datasetRequired: false
             }
         }
         super(config, objects, content);
