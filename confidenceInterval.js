@@ -98,7 +98,8 @@ print(knitr::kable(tmpbsky))
             nav: {
                 name: confidenceInterval.t('navigation'),
                 icon: "icon-confidence_interval",
-                onclick: `r_before_modal('${config.id}')`
+                onclick: `r_before_modal('${config.id}')`,
+                datasetRequired: false
             }
         }
         super(config, objects, content);

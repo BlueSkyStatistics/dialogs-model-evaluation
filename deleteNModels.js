@@ -49,7 +49,8 @@ rm({{selected.modelselector1 | safe}})
             nav: {
                 name: deleteNModels.t('navigation'),
                 icon: "icon-sigma-n",
-                onclick: `r_before_modal('${config.id}')`
+                onclick: `r_before_modal('${config.id}')`,
+                datasetRequired: false
             }
         }
         super(config, objects, content);

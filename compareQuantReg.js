@@ -46,7 +46,8 @@ BSkyFormat(BSkyCompRes)
             nav: {
                 name: compareQuantReg.t('navigation'),
                 icon: "icon-compare-n",
-                onclick: `r_before_modal('${config.id}')`
+                onclick: `r_before_modal('${config.id}')`,
+                datasetRequired: false
             }
         }
         super(config, objects, content);

@@ -177,7 +177,8 @@ require(rsm)
             nav: {
                 name: modelLevelStatistics.t('navigation'),
                 icon: "icon-model_statistics",
-                onclick: `r_before_modal('${config.id}')`
+                onclick: `r_before_modal('${config.id}')`,
+				datasetRequired: false
             }
         }
         super(config, objects, content);

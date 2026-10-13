@@ -54,7 +54,8 @@ class plotAModel extends baseModal {
             nav: {
                 name: plotAModel.t('navigation'),
                 icon: "icon-gaussian-function",
-                onclick: `r_before_modal('${config.id}')`
+                onclick: `r_before_modal('${config.id}')`,
+                datasetRequired: false
             }
         }
         super(config, objects, content);
