@@ -225,7 +225,7 @@ local(
         {
             tryCatch(
             {
-                cat(paste0("Vuong Test: ", BSky_Vuong_Names[1], " vs. ", BSky_Vuong_Names[2], "\\n"))
+                cat(paste0("Vuong Test: \\n", paste(BSky_Vuong_Names[1], "(model1)"), " vs. ", paste(BSky_Vuong_Names[2], "(model2)"), "\\n\\n"))
                 cat(paste(utils::capture.output(pscl::vuong(BSky_Vuong_Models[[1]], BSky_Vuong_Models[[2]])), collapse = "\\n"))
                 cat("\\n")
             }, error = function(e) { cat("Note: Could not run the Vuong test:", conditionMessage(e), "\\n") })
@@ -287,8 +287,8 @@ local(
             nav: {
                 name: summarizeNModels.t('navigation'),
                 icon: "icon-sigma-n",
-                onclick: `r_before_modal('${config.id}')`,
-                datasetRequired: false
+				datasetRequired : false,
+                onclick: `r_before_modal('${config.id}')`
             }
         }
         super(config, objects, content);
