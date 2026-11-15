@@ -21,6 +21,7 @@ const nav = {
             ]
         },
         "./confidenceInterval",
+		"./EmmeansPredictionPlot",
         {
             "name": "Fit",
             "icon": "icon-ruler",
@@ -54,6 +55,13 @@ const nav = {
                 "./Scoring/scoringSurvivalCL",
             ]
         },
+		{
+			"name": "ROC Curves?",
+			"icon": "icon-icc",
+			"children": [
+
+			]
+		},		
         "./stepwise",
         {
             "name": "Summarize",

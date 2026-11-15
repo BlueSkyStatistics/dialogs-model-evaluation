@@ -39,7 +39,7 @@ rm({{selected.modelselector1 | safe}})
     
             `,
             pre_start_r: JSON.stringify({
-                modelselector1: "BSkyGetAvailableModels(c(\"lm\", \"glm\", \"rsm\", \"rlm\", \"coxph\", \"gls\", \"lme\",\"loglm\", \"negbin\", \"nls\",\"survreg\", \"survfit\", \"flexsurvreg\", \"lmerModLmerTest\", \"polr\",\"rq\",\"multinom\",\"loess\"), returnClassTrain=FALSE)",
+                modelselector1: "BSkyGetAvailableModels(c(\"lm\", \"glm\", \"rsm\", \"rlm\", \"coxph\", \"gls\", \"lme\",\"loglm\", \"negbin\", \"nls\",\"survreg\", \"survfit\", \"flexsurvreg\", \"lmerModLmerTest\", \"polr\",\"rq\",\"multinom\",\"loess\",\"zeroinfl\",\"hurdle\", \"mmrm\" , \"drc\"), returnClassTrain=FALSE)",
                 
             })
         }
@@ -63,7 +63,8 @@ rm({{selected.modelselector1 | safe}})
             nav: {
                 name: localization.en.navigation,
                 icon: "icon-sigma-n",
-                onclick: `r_before_modal('${config.id}')`
+                onclick: `r_before_modal('${config.id}')`,
+                datasetRequired: false
             }
         }
         super(config, objects, content);
