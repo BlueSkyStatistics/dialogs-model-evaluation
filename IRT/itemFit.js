@@ -63,20 +63,21 @@ require(eRm);
 require(TAM);
 
 local({
-  classOfModel =class({{selected.modelselector1 | safe}})
-  if (classOfModel =="Rm" || classOfModel =="dRm")
+  classOfModel <- class({{selected.modelselector1 | safe}})
+  
+  if (any(classOfModel %in% c("Rm", "dRm")))
   {
-  rm.pp <- person.parameter({{selected.modelselector1 | safe}});
-  resToFormat<-eRm::itemfit(rm.pp)
-  resToFormat<-BSkyPrintifitClass(resToFormat)
+    rm.pp <- person.parameter({{selected.modelselector1 | safe}})
+    resToFormat <- eRm::itemfit(rm.pp)
+    resToFormat <- BSkyPrintifitClass(resToFormat)
   }
-  if (classOfModel =="tam.mml" || classOfModel =="tam.mml.2pl"|| classOfModel =="tam.mml.2pl" || classOfModel =="tam.mml.mfr")
+  else if (any(classOfModel %in% c("tam.mml", "tam.mml.2pl", "tam.mml.mfr")))
   {
-  tam.fmod1 <-  TAM::msq.itemfit({{selected.modelselector1 | safe}}) 
-  BSkyFormat(tam.fmod1$itemfit,  singleTableOutputHeader = "Itemfit")
-  BSkyFormat(tam.fmod1$summary_itemfit,  singleTableOutputHeader = "Summary Itemfit")
+    tam.fmod1 <- TAM::msq.itemfit({{selected.modelselector1 | safe}}) 
+    BSkyFormat(tam.fmod1$itemfit, singleTableOutputHeader = "Itemfit")
+    BSkyFormat(tam.fmod1$summary_itemfit, singleTableOutputHeader = "Summary Itemfit")
   }
-  })
+})
 `,
             pre_start_r: JSON.stringify({
                 modelselector1: "BSkyGetAvailableModels(c(\"Rm\", \"dRm\",\"tam.mml\", \"tam.mml.2pl\",\"tam.mml.mfr\"))",
